@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Bangazon
 
 ## The Command Line Ordering System
@@ -33,3 +34,6 @@ You will create a series of prompts that will allow the user to create various t
 
 1. Start with writing unit tests. As a group, determine the core functionality of the application. Define classes, controllers and methods that you think you need to build. Do that before writing the implementation code for core logic. DO NOT WRITE TESTS FOR THE USER INTERFACE (menu and prompts).
 1. All classes and methods must be fully documented.
+=======
+# bangazon-cli-sprint2
+>>>>>>> f135a2fe6e12358847d5b2e1cb74fa9c688ff729
