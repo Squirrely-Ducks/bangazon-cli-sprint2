@@ -5,7 +5,7 @@ module.exports.build_product_table = () => {
     return new Promise((resolve, reject) => {
         db.run(`DROP TABLE IF EXISTS product`)
         .run(`CREATE TABLE IF NOT EXISTS product (
-            product_id= INTEGER PRIMARY KEY,
+            product_id INTEGER PRIMARY KEY,
             seller_id INTEGER,
             product_type_id INTEGER,
             title TEXT,
