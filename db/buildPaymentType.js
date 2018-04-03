@@ -12,7 +12,8 @@ module.exports.build_payment_type_table = () => {
       type INT,
       account_number INT,
       FOREIGN KEY (customer_id) REFERENCES customers (customer_id))`
-            , () => {
+            ,(err) => {
+                if (err) reject(err);
                 resolve();
             });
     });

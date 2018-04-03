@@ -18,8 +18,9 @@ module.exports.build_cust_table = () => {
       state TEXT,
       zip TEXT,
       phone TEXT
-    )`, () => {
-        resolve(insertCustData());
+    )`, (err) => {
+        if (err) reject(err);
+        resolve(insert_cust_data());
       });
   });
 }
