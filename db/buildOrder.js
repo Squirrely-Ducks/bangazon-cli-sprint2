@@ -1,10 +1,9 @@
 "use strict";
 
 const sqlite3 = require('sqlite3').verbose();
-const { readFileSync } = require("fs");
 const db = new sqlite3.Database('db/bangazon.sqlite');
 
-
+///// BUILD ORDER TABLE /////
 module.exports.build_order_table = () => {
     return new Promise((resolve, reject) => {
         db.run(`DROP TABLE IF EXISTS [order]`);
@@ -14,10 +13,11 @@ module.exports.build_order_table = () => {
         payment_type_id INT, 
         create_date TEXT, 
         FOREIGN KEY (customer_id) REFERENCES customer (customer_id),
-        FOREIGN KEY (payment_type_id) REFERENCES payment_type (type_id))`,
-            () => {
+        FOREIGN KEY (payment_type_id) REFERENCES payment_type (type_id)) `,
+            (err) => {
+                if (err) reject(err);
                 resolve("done");
             });
     });
-};
+}
 
