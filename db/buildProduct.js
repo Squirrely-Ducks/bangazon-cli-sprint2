@@ -15,7 +15,8 @@ module.exports.build_product_table = () => {
             quantity INTEGER
             FOREIGN KEY (product_type_id) REFERENCES product_type(type_id)
             FOREIGN KEY (seller_id) REFERENCES customer(customer_id)
-            )`, () => {
+            )`, (err) => {
+                 if (err) reject(err);
                 resolve('Product Table Engaged!');
             });
     });
