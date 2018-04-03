@@ -13,7 +13,6 @@ module.exports.build_order_table = () => {
         customer_id INT,
         payment_type_id INT, 
         create_date TEXT, 
-        completed INT,
         FOREIGN KEY (customer_id) REFERENCES customer (customer_id),
         FOREIGN KEY (payment_type_id) REFERENCES payment_type (type_id)) `,
             () => {
