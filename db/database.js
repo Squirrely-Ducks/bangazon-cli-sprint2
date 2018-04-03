@@ -1,6 +1,8 @@
 const sqlite3 = require('sqlite3');
 const path = require('path');
 const { customers } = require('../data/customers');
+const { createTables }= require('./buildDb');
+
 let db;
 
 (function createDb() {

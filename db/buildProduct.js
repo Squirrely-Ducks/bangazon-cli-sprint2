@@ -13,8 +13,8 @@ module.exports.build_product_table = () => {
         price TEXT,
         description TEXT,
         create_date TEXT,
-        quantity INTEGER
-        FOREIGN KEY (product_type_id) REFERENCES product_type(type_id)
+        quantity INTEGER,
+        FOREIGN KEY (product_type_id) REFERENCES product_type(type_id),
         FOREIGN KEY (seller_id) REFERENCES customer(customer_id))`,
             (err) => {
                 if (err) reject(err);
