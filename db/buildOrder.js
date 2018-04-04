@@ -6,8 +6,8 @@ const db = new sqlite3.Database('db/bangazon.sqlite');
 ///// BUILD ORDER TABLE /////
 module.exports.build_order_table = () => {
     return new Promise((resolve, reject) => {
-        db.run(`DROP TABLE IF EXISTS orders`)
-        .run(`CREATE TABLE IF NOT EXISTS orders 
+        db.run(`DROP TABLE IF EXISTS [order]`);
+        db.run(`CREATE TABLE IF NOT EXISTS [order] 
         (order_id INTEGER PRIMARY KEY,
         customer_id INT,
         payment_type_id INT, 
