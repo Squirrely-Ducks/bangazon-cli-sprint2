@@ -1,7 +1,7 @@
 // import { get } from 'https';
 
 const { assert: {equal,deepEqual,isNaN,isArray, isFunction} } = require('chai');
-const { updateProduct,getAllProducts } = require('../app/models/Products.js')
+const { newProduct,getAllProducts } = require('../app/models/Products.js')
 
   
 describe('get products suite',()=>{
@@ -26,6 +26,15 @@ describe('get products suite',()=>{
   });
 });
 
+describe('add products suite',()=>{
+  const activeCustomer = {id: 2};
+  const prodObj = [{product_id:1, seller_id:1, product_type_id:1, title:"shoe",price:"6.99", quantity:1 }]
+
+  it('it should be a function',()=>{
+    isFunction( newProduct )
+  })
+  // it('')
+})
 
 
 

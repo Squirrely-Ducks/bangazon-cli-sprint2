@@ -9,4 +9,9 @@ module.exports.getAllProducts = (id)=>{
     });
 };
 
+module.exports.newProduct = ()=>{
+  return new Promise((resolve, reject) =>{ 
+    resolve(prodObj)   
+  });
+};
 
