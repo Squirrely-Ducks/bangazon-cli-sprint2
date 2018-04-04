@@ -11,7 +11,7 @@ module.exports.build_payment_type_table = () => {
         customer_id INT,
         type INT,
         account_number INT,
-        FOREIGN KEY (customer_id) REFERENCES customers (customer_id))`,
+        FOREIGN KEY (customer_id) REFERENCES customer (customer_id))`,
             (err) => {
             if (err) reject(err);
             resolve("done");
