@@ -1,4 +1,5 @@
-const { assert: {equal} } = require('chai');
+const { } = require('../app/models/customer');
+const { assert: { isNumber, isObject, equal } } = require('chai');
 
 // Placed here to confirm test file runs properly
 describe('just a test', () => {
@@ -7,4 +8,17 @@ describe('just a test', () => {
   });
 });
 
-// Pro Tip: Remember, we are testing features, not functions. Require whichever modules you need to test a feature
+// Test for the creating customers method
+describe('customers module', () => {
+  describe('adding customer', () => {
+    it('should be a function', () => {
+      isFunction();
+    });
+    it('should add an object', () => {
+      isObject();
+    });
+    it('should have an id === id', () => {
+
+    });
+  });
+});
