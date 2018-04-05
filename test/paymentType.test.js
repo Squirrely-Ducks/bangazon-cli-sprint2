@@ -1,5 +1,15 @@
 const { assert: { equal, deepEqual, isNumber, isObject, isArray, isFunction } } = require('chai');
+const bpt = require('../db/buildPaymentType');
 let { createType, getTypesByCustomer, getType, deleteType } = require('../app/models/PaymentType.js');
+
+
+
+beforeEach((done) => {
+    bpt.build_payment_type_table()
+        .then(() => {
+            done();
+        });
+});
 
 let testObj = {
     payment_type_id: 1,
