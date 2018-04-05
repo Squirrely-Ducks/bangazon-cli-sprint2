@@ -47,9 +47,11 @@ module.exports.getOneOrder = (id) => {
 
 module.exports.getAllOrderProduct = (id) => {
     return new Promise ((resolve, reject)=>{
-        db.all(`SELECT *
+        db.all(`SELECT product.*
                 FROM order_product
-                WHERE order_id = ${id}`,
+                JOIN product
+                ON product.product_id = order_product.product_id
+                WHERE order_product.order_id = ${id}`,
                 (err,orderProd)=>{
                     if(err) return reject(err);
                     resolve(orderProd)
@@ -67,7 +69,7 @@ module.exports.addOrderProd = ({order_id, product_id}) => {
                         console.log('error', err);
                         reject(err)
                     }
-                    resolve(this.lastID)
+                    resolve(this.changes)
                 })
     })
 }

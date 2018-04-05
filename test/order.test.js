@@ -84,7 +84,6 @@ describe('Tests for Orders', ()=>{
       getAllOrderProduct(id)
       .then((orderProd)=>{
         console.log('orderPro', orderProd);
-        
       })
     })
   })
@@ -95,13 +94,8 @@ describe('Tests for Orders', ()=>{
     })
     it('should post to db', ()=>{
       return addOrderProd(testOrderProd)
-      .then((id)=>{
-        testOrderProd.order_id = id
-        console.log('id', id);
-        return getAllOrderProduct(id)
-      })
-      .then((testProd)=>{
-        deepEqual(testProd[0], testOrderProd)
+      .then((changes)=>{
+          equal(changes, 1)
       })
     })
   })
