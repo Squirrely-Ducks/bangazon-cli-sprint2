@@ -17,7 +17,7 @@ module.exports.build_order_table = () => {
         payment_type_id INT, 
         create_date TEXT, 
         FOREIGN KEY (customer_id) REFERENCES customer (customer_id),
-        FOREIGN KEY (payment_type_id) REFERENCES payment_type (type_id)) `,
+        FOREIGN KEY (payment_type_id) REFERENCES payment_type (payment_type_id)) `,
             (err) => {
                 if (err) reject(err);
                 resolve(insert_order_date());
