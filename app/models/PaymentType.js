@@ -41,3 +41,14 @@ module.exports.getType = (id) => {
             });
     });
 }
+
+module.exports.deleteType = (id) => {
+    return new Promise((resolve, reject) => {
+        db.run (` DELETE FROM payment_type
+        WHERE payment_type_id=${id}`,
+            (err, type) => {
+                if (err) return reject(err);
+                resolve(this);
+            });
+    });
+}

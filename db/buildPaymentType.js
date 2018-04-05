@@ -15,12 +15,6 @@ module.exports.build_payment_type_table = () => {
         customer_id INT,
         type INT,
         account_number INT,
-<<<<<<< HEAD
-        FOREIGN KEY (customer_id) REFERENCES customer (customer_id))`,
-            (err) => {
-            if (err) reject(err);
-            resolve("done");
-=======
         FOREIGN KEY (customer_id) REFERENCES customers (customer_id))`,
                 (err) => {
                     if (err) reject(err);
@@ -44,7 +38,6 @@ const insert_payment_type_data = () => {
                 () => {
                     resolve();
                 });
->>>>>>> b47d91d4008a47746f6e43bf9aa8968e97c47357
         });
     });
 };

@@ -1,5 +1,5 @@
 const { assert: { equal, deepEqual, isNumber, isObject, isArray, isFunction } } = require('chai');
-let { createType, getTypesByCustomer, getType } = require('../app/models/PaymentType.js');
+let { createType, getTypesByCustomer, getType, deleteType } = require('../app/models/PaymentType.js');
 
 let testObj = {
     payment_type_id: 1,
@@ -32,11 +32,11 @@ describe('get all types', () => {
                 isObject(types[0])
             });
     });
-    it('should have correct objects', ()=>{
+    it('should have correct objects', () => {
         return getTypesByCustomer(1)
-        .then(types=>{
-            deepEqual(types[0], testObj)
-        });
+            .then(types => {
+                deepEqual(types[0], testObj)
+            });
     })
 });
 describe('get type', () => {
@@ -59,17 +59,19 @@ describe('createType', () => {
         return createType(1, 'VISA', 12345)
             .then(typeId => {
                 isNumber(typeId);
+                deleteType(typeId)
             });
     });
-    
+
     it('should create the correct object in the database', () => {
+        let id;
         return createType(3, 'MC', 45678)
             .then(typeId => {
+                id = typeId;
                 return getType(typeId)
-                    .then(newType => {
-                        equal(typeId, newType.payment_type_id)
-                    });
-
-            });
+            }).then(newType => {
+                equal(id, newType.payment_type_id)
+                deleteType(id);
+            })
     });
 });
