@@ -73,19 +73,19 @@ describe('add products suite',()=>{
   });
 });
 
-// describe('update products suite',()=>{
-//   let id;
-//   it('it should be a function',()=>{
-//         isFunction( updateProduct );
-//   })
-//   it('the new object should reflect the changes',()=>{
-//     return updateProduct(1, "seller_id",10)
-//     .then(data => {
-//       console.log(data)
-//       equal(1,data)
-//     })
-//   })
-// })
+describe('update products suite',()=>{
+  let id;
+  it('it should be a function',()=>{
+        isFunction( updateProduct );
+  })
+  it('the new object should reflect the changes',()=>{
+    return updateProduct(2, ["title"],["Fantastic Frozen Bacon Trees"])
+    .then(data => {
+      return getOneProduct(2);
+      equal(1,data)
+    })
+  })
+})
 
 
 
