@@ -1,4 +1,4 @@
-const { new_customer, get_one_customer, get_all_customers } = require('../app/models/Customer');
+const { new_customer, get_one_customer, get_all_customers, remove_customer } = require('../app/models/Customer');
 const { assert: { isNumber, isArray, isObject, equal, isFunction, deepEqual } } = require('chai');
 
 // Dummy arrays and objects
@@ -32,7 +32,7 @@ describe('CUSTOMERS MODULE: ', () => {
       let test_id = oneCustomer.customer_id;
       return get_one_customer(test_id)
       .then((customer)=>{
-        deepEqual(oneCustomer, customer[0]);
+        deepEqual(oneCustomer, customer);
       })
     });
   });
@@ -48,13 +48,14 @@ describe('CUSTOMERS MODULE: ', () => {
     });
 
     it('should post to the data base', () => {
-        return new_customer(addTestObj)
-        .then((id)=>{
+      return new_customer(addTestObj)
+        .then((id) => {
           addTestObj.customer_id = id
           return get_one_customer(id);
         })
-        .then((customer)=>{
-          deepEqual(customer[0], addTestObj)
+        .then((customer) => {
+          deepEqual(customer, addTestObj);
+          return remove_customer(customer.customer_id);
         })
     });
   });
@@ -76,5 +77,6 @@ describe('CUSTOMERS MODULE: ', () => {
     });
   });
 });
-               
-          
+
+
+
