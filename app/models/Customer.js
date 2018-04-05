@@ -20,7 +20,7 @@ module.exports.get_all_customers = () => {
 // method for getting one customer 
 module.exports.get_one_customer = (id) => {
   return new Promise((resolve, reject) => {
-    db.all(`SELECT *
+    db.get(`SELECT *
       FROM customer
       WHERE customer_id = ${id}`,
       (err, customer) => {
@@ -51,3 +51,17 @@ module.exports.new_customer = ({ first_name, last_name, street, city, state, zip
       });
   });
 };
+
+// method for deleting a customer 
+module.exports.remove_customer = (id) => {
+  return new Promise((resolve, reject) => {
+    db.run(`DELETE FROM customer
+    WHERE customer_id = ${id}`,
+      function (err) {
+        if (err) reject(err)
+        resolve(this.changes)
+      })
+  })
+}
+
+    
