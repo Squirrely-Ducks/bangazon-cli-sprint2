@@ -35,13 +35,27 @@ module.exports.getAllOrders = (id) => {
 
 module.exports.getOneOrder = (id) => {
     return new Promise ((resolve, reject) => {
-        db.all(`SELECT *
+        db.get(`SELECT *
                 FROM [order]
                 WHERE order_id = ${id}`,
                 (err, oneOrder)=>{
                 if(err) return reject(err);
                 resolve(oneOrder)
             })
+    })
+}
+
+module.exports.deleteOrder = (id) => {
+    return new Promise((resolve, reject)=>{
+        db.run(`DELETE
+                FROM [order]
+                WHERE [order].order_id = ${id}`,
+                function(err, order) {
+                    if(err){
+                        return reject(err)
+                    }
+                    resolve(this.changes);
+                })
     })
 }
 
@@ -70,6 +84,19 @@ module.exports.addOrderProd = ({order_id, product_id}) => {
                         reject(err)
                     }
                     resolve(this.changes)
+                })
+    })
+}
+module.exports.deleteOrderProd = (id) => {
+    return new Promise((resolve, reject)=>{
+        db.run(`DELETE
+                FROM order_product
+                WHERE order_product.order_id = ${id}`,
+                function(err, order) {
+                    if(err){
+                        return reject(err)
+                    }
+                    resolve(this.changes);
                 })
     })
 }

@@ -1,5 +1,5 @@
 const { assert: { equal ,isFunction, isArray, isObject, deepEqual } } = require("chai");
-const { createNewOrder, getAllOrders, getOneOrder, getAllOrderProduct, addOrderProd } = require('../app/models/Order');
+const { createNewOrder, getAllOrders, getOneOrder, getAllOrderProduct, addOrderProd, deleteOrder, deleteOrderProd } = require('../app/models/Order');
 
 // dummy data for order
 let testOrder = {order_id: 1, customer_id: 1,
@@ -44,7 +44,7 @@ describe('Tests for Orders', ()=>{
     it('should return one order', () => {
       return getOneOrder(testOrder.order_id)
       .then((order)=>{
-        isArray(order);  
+        isObject(order);  
       })
     });
   });
@@ -61,7 +61,9 @@ describe('Tests for Orders', ()=>{
         return getOneOrder(id);
       })
       .then((order)=>{
-        deepEqual(order[0], newOrder)
+        console.log('order', order);
+        deepEqual(order, newOrder)
+        deleteOrder(order.order_id)
       })
     });
 
@@ -96,6 +98,7 @@ describe('Tests for Orders', ()=>{
       return addOrderProd(testOrderProd)
       .then((changes)=>{
           equal(changes, 1)
+          deleteOrderProd(testOrderProd.order_id)
       })
     })
   })
