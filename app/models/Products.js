@@ -2,9 +2,9 @@ const { Database } = require('sqlite3').verbose();
 const path = require('path');
 const db = new Database(path.join(__dirname, '../..', 'db', 'bangazon.sqlite'));
 
-const prodObj =[{product_id:1, seller_id:1, product_type_id:1, title:"shoe",price:"6.99", description:"classy fun", create_date:"2017-09-01", quantity:1 }]
 
-module.exports.getAllProducts = (id)=>{
+
+module.exports.getAllProducts = ()=>{
     return new Promise((resolve, reject) =>{ 
       db.all(
         `SELECT *
@@ -51,16 +51,27 @@ module.exports.newProduct = (seller_id, product_type_id, title, price, descripti
   });
 };  
 
-module.exports.updateProduct = (id, columns, values) => {
+module.exports.updateProduct = (id, column, values) => {
   return new Promise((resolve, reject) => {
-      for (let i = 0; i < columns.length; i++) {
+      for (let i = 0; i < column.length; i++) {
           db.run(`UPDATE product
-              SET "${columns[i]}" = "${values[i]}"
-              WHERE product.product_id = ${id}`, 
+              SET "${column[i]}" = "${values[i]}"
+              WHERE product_id = ${id}`, 
               function (err, rows) {
+                  console.log(this.changes);
                   resolve(this.changes);
               });
       }
   });
 };
 
+module.exports.deleteProduct = (id) => {
+    return new Promise((resolve, reject) => {
+        db.run (` DELETE FROM product
+        WHERE product.product_id=${id}`,
+            (err, type) => {
+                if (err) return reject(err);
+                resolve(this);
+            });
+    });
+};
