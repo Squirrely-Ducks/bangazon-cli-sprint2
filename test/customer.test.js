@@ -1,4 +1,4 @@
-const { new_customer, get_one_customer, remove_customer } = require('../app/models/Customer');
+const { new_customer, get_one_customer, get_all_customers, remove_customer } = require('../app/models/Customer');
 const { assert: { isNumber, isArray, isObject, equal, isFunction, deepEqual } } = require('chai');
 
 // Dummy arrays and objects
@@ -24,25 +24,29 @@ let oneCustomer = {
 }
 
 // Test for the creating customers method
-describe('customers module', () => {
+describe('CUSTOMERS MODULE: ', () => {
 
-  describe('getting customer', () => {
+  describe('Getting One Customer: ', () => {
+    
     it('return one customer from database', () => {
       let test_id = oneCustomer.customer_id;
       return get_one_customer(test_id)
-        .then((customer) => {
-          deepEqual(oneCustomer, customer)
-        })
+      .then((customer)=>{
+        deepEqual(oneCustomer, customer);
+      })
     });
   });
 
-  describe('adding customer', () => {
+  describe('Adding Customer: ', () => {
+
     it('should be a function', () => {
       isFunction(new_customer);
     });
+
     it('should add an object inside array', () => {
       isObject(addTestObj);
     });
+
     it('should post to the data base', () => {
       return new_customer(addTestObj)
         .then((id) => {
@@ -53,6 +57,23 @@ describe('customers module', () => {
           deepEqual(customer, addTestObj);
           return remove_customer(customer.customer_id);
         })
+    });
+  });
+
+  describe('Get All Customers: ', () => {
+
+    it('array length should be greater than 1', () => {
+        return get_all_customers()
+        .then(customers => {
+          equal(customers.length > 1, true);
+        })
+    });
+
+    it('should deepEqual test object', () => {
+        return get_all_customers()
+        .then(customers => {
+          deepEqual( customers[0], oneCustomer);
+      });
     });
   });
 });
