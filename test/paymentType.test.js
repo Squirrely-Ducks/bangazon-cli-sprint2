@@ -4,8 +4,8 @@ let { createType, getTypesByCustomer, getType } = require('../app/models/Payment
 let testObj = {
     payment_type_id: 1,
     customer_id: 1,
-    type: 'VISA',
-    account_number: 12345
+    type: 'Visa',
+    account_number: 5158431997693020
 }
 let test2 = {
     payment_type_id: 2,
