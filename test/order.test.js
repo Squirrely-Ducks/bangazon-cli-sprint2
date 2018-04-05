@@ -61,7 +61,6 @@ describe('Tests for Orders', ()=>{
         return getOneOrder(id);
       })
       .then((order)=>{
-        console.log('order', order);
         deepEqual(order, newOrder)
         deleteOrder(order.order_id)
       })
@@ -85,7 +84,6 @@ describe('Tests for Orders', ()=>{
       let id = testOrderProd.order_id
       getAllOrderProduct(id)
       .then((orderProd)=>{
-        console.log('orderPro', orderProd);
       })
     })
   })
