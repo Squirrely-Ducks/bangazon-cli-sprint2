@@ -2,12 +2,12 @@ const { assert: { equal, isFunction, isArray, isObject, deepEqual } } = require(
 const { createNewOrder, getAllOrders, getOneOrder, getAllOrderProduct, addOrderProd, deleteOrder, deleteOrderProd, completeOrder } = require('../app/models/Order');
 const bO = require('../db/buildOrder');
 
-beforeEach((done) => {
-    bO.build_order_table()
-        .then(() => {
-            done();
-        });
-});
+// after((done) => {
+//     bO.build_order_table()
+//         .then(() => {
+//             done();
+//         });
+// });
 
 // dummy data for order
 let testOrder = {

@@ -47,6 +47,7 @@ module.exports.new_customer = ({ first_name, last_name, street, city, state, zip
           console.log(err);
           reject(err);
         }
+        
         resolve(this.lastID)
       });
   });
