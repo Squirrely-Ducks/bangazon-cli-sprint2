@@ -1,21 +1,24 @@
 
 
 const { assert: {equal,deepEqual,isNaN,isArray, isFunction, isNumber, isObject, changesBy} } = require('chai');
-const { newProduct,getAllProducts, getOneProduct, updateProduct, deleteProduct  } = require('../app/models/Products.js')
+const { newProduct,getAllProducts, getOneProduct, updateProduct, deleteProduct,getAllProductsByCust, getOneProductByCust  } = require('../app/models/Products.js')
 
   
 describe('get products suite',()=>{
+
   const prodObj = [{"product_id":1,"seller_id":10,"product_type_id":1,"title":"Fantastic Frozen Bacon","price":"327.00","description":"vertical e-enable models","create_date":"2017-12-13T00:13:40.659Z","quantity":19}]
 
   it('it should be a function', ()=>{
    isFunction( getAllProducts )
   });
+
   it('it should return an array',()=>{
     return getAllProducts()
     .then((data)=>{
       isArray(data);
     })
   })
+
   it('the array should contain specific object keys/values',()=>{
     return getAllProducts()
     .then((data)=>{
@@ -26,16 +29,20 @@ describe('get products suite',()=>{
 });
 
 describe('get one product suite',()=>{
+
   const prodObj = [{"product_id":1, "seller_id":10,"product_type_id":1,"title":"Fantastic Frozen Bacon","price":"327.00","description":"vertical e-enable models","create_date":"2017-12-13T00:13:40.659Z","quantity":19}]
+
   it('it should be a function', ()=>{
     isFunction( getOneProduct )
    });
+
    it('should return an object', () => {
     return getOneProduct(1)
         .then(data => {
             isObject(data)
         });
   });
+
   it('should return the correct object', () => {
     return getOneProduct(1)
         .then(data => {
@@ -46,10 +53,13 @@ describe('get one product suite',()=>{
 
 
 describe('add products suite',()=>{
+
  let id;
+
   it('it should be a function',()=>{
     isFunction( newProduct );
   });
+
   it('should return a number',()=>{
     return newProduct( 1, 1, "shoe", "6.99", "classy fun", "2017-09-01T00:13:40.659Z", 1)
     .then(productId=>{
@@ -74,11 +84,14 @@ describe('add products suite',()=>{
 });
 
 describe('update products suite',()=>{
+
   let id;
+
   it('it should be a function',()=>{
         isFunction( updateProduct );
   })
-  it('the new object should reflect the changes',()=>{
+
+  it('the updated object should reflect the changes',()=>{
     return updateProduct(2, ["title"],["Fantastic Frozen Bacon Trees"])
     .then(data => {
       return getOneProduct(2);
@@ -87,8 +100,47 @@ describe('update products suite',()=>{
   })
 })
 
+describe('get all products by customer suite',()=>{
 
+  it('it should return an array',()=>{
+    return getAllProductsByCust(10)
+    .then((data)=>{
+      isArray(data);
+    })
+  })
 
+  it('should return the correct object(s)', () => {
+
+    const prodObj = [{"product_id":1, "seller_id":10,"product_type_id":1,"title":"Fantastic Frozen Bacon","price":"327.00","description":"vertical e-enable models","create_date":"2017-12-13T00:13:40.659Z","quantity":19}]
+
+    return getAllProductsByCust(10)
+        .then(prods => {
+          prods.forEach(prod => {
+            deepEqual(prod, prodObj[0])
+          });  
+        });
+  });
+})
+
+describe('get a specific product by customer suite',()=>{
+
+  it('it should return one object',()=>{
+    return getOneProductByCust(1,10)
+    .then((data)=>{
+      isObject(data);
+    })
+  })
+
+  it('should return the correct object', () => {
+
+    const prodObj = {"product_id":1, "seller_id":10,"product_type_id":1,"title":"Fantastic Frozen Bacon","price":"327.00","description":"vertical e-enable models","create_date":"2017-12-13T00:13:40.659Z","quantity":19}
+
+    return getOneProductByCust(1,10)
+        .then(data => {
+            deepEqual(data, prodObj) 
+        });
+  });
+})
 
 
 
