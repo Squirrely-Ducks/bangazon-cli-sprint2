@@ -64,13 +64,15 @@ let mainMenuHandler = (err, userInput) => {
       // Update a Product to Sell
       
       updateProductArray(id)
-      module.exports.displayWelcome();
+      .then(()=>{
+        module.exports.displayWelcome();
+      })
       break;
 
     case "8":
     // Remove a Product to Sell
     
-      removeProduct(id)
+      removeProduct(id);
       module.exports.displayWelcome();
       break;
   }
