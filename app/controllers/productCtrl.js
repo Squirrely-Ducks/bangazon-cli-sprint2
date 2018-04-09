@@ -76,21 +76,29 @@ let promptNewProduct = () => {
         name: 'title',
         description: 'Enter Product Title',
         type: 'string',
+        pattern: /^[a-zA-Z]+/,
+        message: 'please enter a valid title',
         required: true
       }, {
         name: 'price',
         description: 'Enter price in the format xx.yy',
-        type: 'number',
+        type: 'string',
+        pattern: /[0-9.]{3}[0-9]{2}/,
+        message: 'enter a valid price',
         required: true
       }, {
         name: 'description',
         description: 'Enter product description',
         type: 'string',
+        pattern: /^[a-zA-Z]+\s+/,
+        message: 'please enter a valid title',
         required: true
       }, {
         name: 'quantity',
-        description: 'Enter the quanity to sell',
-        type: 'number',
+        description: 'Enter the quantity to sell',
+        type: 'string',
+        pattern: /[0-9]+/,
+        message: 'please enter a valid quantity',
         required: true
       }], function(err, results) {
         if (err) return reject(err);
