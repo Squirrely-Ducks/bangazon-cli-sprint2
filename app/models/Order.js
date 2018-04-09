@@ -32,6 +32,19 @@ module.exports.getAllOrders = (id) => {
             });
     });
 }
+module.exports.getActiveOrder = (id) => {
+    return new Promise((resolve, reject) => {
+        console.log('here', id)
+        db.get(` SELECT *
+                FROM [order]
+                WHERE customer_id = ${id} 
+                AND payment_type_id isnull`,
+            (err, order) => {
+                if (err) return reject(err);
+                resolve(order);
+            });
+    });
+}
 
 module.exports.getOneOrder = (id) => {
     return new Promise((resolve, reject) => {
