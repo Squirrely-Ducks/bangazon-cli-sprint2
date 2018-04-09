@@ -87,6 +87,8 @@ module.exports.addOrderProd = ({ order_id, product_id }) => {
             });
     });
 }
+
+
 module.exports.deleteOrderProd = (id) => {
     return new Promise((resolve, reject) => {
         db.run(`DELETE
