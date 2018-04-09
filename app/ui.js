@@ -69,22 +69,27 @@ let mainMenuHandler = (err, userInput) => {
       addNewProduct(id)
       
       //main menus prompts
-  
+      
       break;
   
     case "7":
+    
       // Update a Product to Sell
       
       updateProductArray(id)
+
       
       
+
       break;
 
     case "8":
+
     // Remove a Product to Sell
     
-      removeProduct(id)
-      
+
+      removeProduct(id);
+
       break;
   }
 };

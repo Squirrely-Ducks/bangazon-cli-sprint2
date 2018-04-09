@@ -75,28 +75,38 @@ let promptNewProduct = () => {
     return new Promise( (resolve, reject) => {
       prompt.get([{
         name: 'product_type_id',
-        description: 'Enter type(number)',
+        description: 'Enter product type id',
+        pattern: /^\d$/,
+        message: 'please enter a valid product type id',
         type: 'number',
         required: true
       },{
         name: 'title',
         description: 'Enter Product Title',
         type: 'string',
+        pattern: /^[a-zA-Z]+/,
+        message: 'please enter a valid title',
         required: true
       }, {
         name: 'price',
         description: 'Enter price in the format xx.yy',
-        type: 'number',
+        type: 'string',
+        pattern: /[0-9.]{3}[0-9]{2}/,
+        message: 'enter a valid price',
         required: true
       }, {
         name: 'description',
         description: 'Enter product description',
         type: 'string',
+        pattern: /^[a-zA-Z]+\s+/,
+        message: 'please enter a valid description',
         required: true
       }, {
         name: 'quantity',
-        description: 'Enter the quanity to sell',
-        type: 'number',
+        description: 'Enter the quantity to sell',
+        type: 'string',
+        pattern: /[0-9]+/,
+        message: 'please enter a valid quantity',
         required: true
       }], function(err, results) {
         if (err) return reject(err);
@@ -109,28 +119,38 @@ let promptNewProduct = () => {
     return new Promise( (resolve, reject) => {
       prompt.get([{
         name: 'product_type_id',
-        description: 'Enter type(number)',
-        type: 'number',
+        description: 'Enter product type id',
+        type: 'string',
+        pattern: /^\d$/,
+        message: 'please enter a valid product type id',
         required: true
-      },{
+      }, {
         name: 'title',
         description: 'Enter Product Title',
         type: 'string',
+        pattern: /^[a-zA-Z]+\s+/,
+        message: 'please enter a valid title',
         required: true
       }, {
         name: 'price',
         description: 'Enter price in the format xx.yy',
-        type: 'number',
+        type: 'string',
+        pattern: /[0-9.]{3}[0-9]{2}/,
+        message: 'enter a valid price',
         required: true
       }, {
         name: 'description',
         description: 'Enter product description',
         type: 'string',
+        pattern: /^[a-zA-Z]+\s+/,
+        message: 'please enter a valid description',
         required: true
       }, {
         name: 'quantity',
-        description: 'Enter the quanity to sell',
-        type: 'number',
+        description: 'Enter the quantity to sell',
+        type: 'string',
+        pattern: /[0-9]+/,
+        message: 'please enter a valid quantity',
         required: true
       }], function(err, results) {
         if (err) return reject(err);
@@ -269,7 +289,7 @@ module.exports.promptAddToCart = (id) => {
     //GETTING ORDERS TO UPDATE
     getAllOrders(id)
     .then((orders)=>{
-      return openOrderFilter(orders);
+      return openOrderFilter(orders); 
     }).then((openOrders)=>{
       return subMenuChooseOrderPrompt(openOrders)
     }).then((orderChoiceId)=>{
