@@ -9,10 +9,17 @@ const { Database } = require("sqlite3").verbose();
 prompt.message = colors.blue("Bangazon Corp");
 
 // app modules
-const { promptNewCustomer, promptAllCustomers } = require("./controllers/customerCtrl");
+const {
+  promptNewCustomer,
+  promptAllCustomers
+} = require("./controllers/customerCtrl");
 const { new_customer } = require("./models/Customer");
 const db = new Database(path.join(__dirname, "..", "db", "bangazon.sqlite"));
-const {setActiveCustomer, getActiveCustomer } = require('./activeCustomer')
+const { setActiveCustomer, getActiveCustomer } = require("./activeCustomer");
+const {
+  promptAddPayment,
+  createPayment
+} = require("./controllers/addpaymentCtrl");
 // Start Program
 prompt.start();
 
@@ -31,13 +38,18 @@ let mainMenuHandler = (err, userInput) => {
           module.exports.displayWelcome();
         });
       break;
-      // Allows user to select the customer to make active
+    // Allows user to select the customer to make active
     case "2":
-      promptAllCustomers()
-        .then((customerSelect)=>{
-          setActiveCustomer(customerSelect.customer_id);
-          module.exports.displayWelcome();
-        })
+      promptAllCustomers().then(customerSelect => {
+        setActiveCustomer(customerSelect.customer_id);
+        module.exports.displayWelcome();
+      });
+      break;
+    case "3":
+      promptAddPayment().then(paydata => {
+        createPayment(paydata);
+        module.exports.displayWelcome();
+      });
   }
 };
 
