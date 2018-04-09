@@ -28,7 +28,7 @@ let mainMenuHandler = (err, userInput) => {
           return new_customer(custData);
         })
         .then(() => {
-          displayWelcome();
+          module.exports.displayWelcome();
         });
       break;
       // Allows user to select the customer to make active
