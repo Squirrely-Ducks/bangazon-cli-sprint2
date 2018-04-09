@@ -70,6 +70,8 @@ let promptNewProduct = () => {
       prompt.get([{
         name: 'product_type_id',
         description: 'Enter product type id',
+        pattern: /^\d$/,
+        message: 'please enter a valid product type id',
         type: 'number',
         required: true
       },{
@@ -113,7 +115,7 @@ let promptNewProduct = () => {
         name: 'product_type_id',
         description: 'Enter product type id',
         type: 'string',
-        pattern: /\d$/,
+        pattern: /^\d$/,
         message: 'please enter a valid product type id',
         required: true
       }, {
