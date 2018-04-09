@@ -17,7 +17,14 @@ const {setActiveCustomer, getActiveCustomer } = require('./activeCustomer');
 
 
 
-
+function validator(id){
+  console.log(`${colors.bgRed(`please work`)}`)
+  if (!id){
+      console.log(`${colors.bgRed(`please set an active customer`)}`);
+      prompt.stop()
+      return displayWelcome();
+  }
+};
 
 
 // Start Program
@@ -37,7 +44,7 @@ let mainMenuHandler = (err, userInput) => {
           return new_customer(custData);
         })
         .then(() => {
-          module.exports.displayWelcome();
+          displayWelcome();
         });
       break;
       // Allows user to select the customer to make active
@@ -45,17 +52,22 @@ let mainMenuHandler = (err, userInput) => {
       promptAllCustomers()
         .then((customerSelect)=>{
           setActiveCustomer(customerSelect.customer_id);
-          module.exports.displayWelcome();
+          displayWelcome();
         })
         break;
         // Add product to shopping cart
     case "4":
-      promptAddToCart(id)   
+      // validator(id);
+      promptAddToCart(id)
+      .then((data)=>{
+        displayWelcome(); 
+      })
       break;
 
     case "6":
       // Add a Product to Sell
       addNewProduct(id)
+      
       //main menus prompts
   
       break;
@@ -65,18 +77,20 @@ let mainMenuHandler = (err, userInput) => {
       
       updateProductArray(id)
       
+      
       break;
 
     case "8":
     // Remove a Product to Sell
     
       removeProduct(id)
+      
       break;
   }
 };
 
 // Displays the actual main menu in console
-module.exports.displayWelcome = () => {
+let displayWelcome = () => {
   let headerDivider = `${colors.america(
     "*********************************************************"
   )}`;
@@ -108,3 +122,8 @@ module.exports.displayWelcome = () => {
   });
 };
 
+
+module.exports = {
+   displayWelcome
+   
+};

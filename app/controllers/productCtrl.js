@@ -10,6 +10,8 @@ const { get_all_customers, get_one_customer } = require('../models/Customer');
 const { newProduct,getAllProducts, getOneProduct, updateProduct, deleteProduct,getAllProductsByCust, getOneProductByCust, getProdsNotOnOrder  } = require('../models/Products');
 const { createNewOrder, getAllOrders, getOneOrder, getAllOrderProduct, addOrderProd, deleteOrder, deleteOrderProd, completeOrder } = require('../models/Order');
 const {setActiveCustomer, getActiveCustomer } = require('../activeCustomer');
+// const {validator} = require('../validator');
+      
 
 
 //HELPER FUNCTIONS
@@ -20,12 +22,7 @@ const time = ()=>{
    return now.toISOString()
 }
 
-// validate active cusotmer is chosen
-const validator = (id)=>{
-  if (null === id){
-      console.log(`${colors.bgRed(`please set an active customer`)}`)
-  } else return id
-}
+
 
 //filter products not on orders
 const productFilter = (products,id)=>{
@@ -53,7 +50,16 @@ const openOrderFilter = (orders)=>{
     } else {}
     return openArray;
 }
-
+//filter products with no quantity
+const filterNoneAvail = (prodArray)=>{
+  let availArray = [];
+  prodArray.forEach(prod=>{
+    if (prod.quantity > 1){
+      availArray.push(prod)
+    }
+  })
+  return availArray;
+}
 
 //UI LAYOUT
 
@@ -143,13 +149,15 @@ let promptNewProduct = () => {
       ([{
         name: "product_id",
         description: "Please make a selection",
+        pattern: /[0-9]+/,
+        conform: function(v){return !(+v > prods.length || +v < 1)},
+        message: "Please choose a number from the above list" 
       }],
       function(err,product) {
         if(err) {
           return reject(err)
         }
         else {
-          // console.log(product);
           resolve (product.product_id);
         } 
       })
@@ -172,7 +180,6 @@ let promptNewProduct = () => {
           return reject(err)
         }
         else {
-          // console.log(product);
           resolve (product.product_id);
         } 
       })
@@ -189,6 +196,9 @@ let promptNewProduct = () => {
       ([{
         name: "order_id",
         description: "Please make a selection",
+        pattern: /[0-9]+/,
+        // conform: function(v){return !(+v > openOrders.length || +v < 1)},
+        message: "Please choose a number from the above list" 
       }],
       function(err,order) {
         if(err) {
@@ -223,11 +233,37 @@ let promptNewProduct = () => {
     })
   }
 
+
+  let subMenuConfirmPrompt = (products)=>{
+    return new Promise( (resolve, reject) => {
+  
+    prompt.get
+      ([{
+        name: "Complete",
+            conform: function (v) { return v === "y" || v === "n" }, 
+            message: "Please choose to y/n to complete this order or not"
+      }],
+      function(err, choice) {
+        if(err) {
+          return reject(err)
+        }
+        else {
+          resolve (choice);
+        } 
+      })
+    })
+  }
+
+
+
+
 //////// FUNCTIONS FOR UI
 module.exports.promptAddToCart = (id) => {
+  // validator(id);
+  return new Promise( (resolve, reject) => {
+  
   let orderId;
   let prodId;
-    // validator(id)
     console.log(addProdHeader);
 
     //GETTING ORDERS TO UPDATE
@@ -242,6 +278,8 @@ module.exports.promptAddToCart = (id) => {
       //refactor here, new chain
       return getAllProducts()
     }).then((products)=>{
+      return filterNoneAvail(products)
+    }).then((products)=>{
       return subMenuChooseProductPrompt(products)
     }).then((productId)=>{
         return prodId = productId;
@@ -254,16 +292,26 @@ module.exports.promptAddToCart = (id) => {
     }).then((data)=>{
       //update quantity
       return getOneProduct((prodId))
-    }).then((data)=>{
-        
+    }).then((data)=>{   
       let columns = Object.keys(data);      
       let values = Object.values(data);
       values.splice(7,1,(data.quantity - 1))
       return updateProduct(+prodId, columns, values)
-    })
-  
+    }).then(()=>{
+      console.log("Product added Successfully")
+      prompt.stop();
+    }),function(err, choice) {
+      if(err) {
+        return reject(err)
+      }
+      else {
+        resolve (this);
+      } 
+ 
+    }
 
-};
+  })
+}
 
 
   //ADDING A PRODUCT
@@ -271,6 +319,8 @@ module.exports.addNewProduct = (id)=>{
     console.log(addProdHeader);
     console.log('Add a product');
     console.log(addProdHeader);
+  return new Promise( (resolve, reject) => {
+    
     promptNewProduct(id)
     .then((data)=>{
         data.seller_id = id;
@@ -278,7 +328,15 @@ module.exports.addNewProduct = (id)=>{
         return data
     }).then((data)=>{
         newProduct(data.seller_id, data.product_type_id, data.title, data.price, data.description, data.create_date, data.quantity);
-    })
+    }),  function(err, choice) {
+      if(err) {
+        return reject(err)
+      }
+      else {
+        resolve (this);
+      }
+    }
+  })     
 }
      
     //UPDATING A PRODUCT
@@ -306,7 +364,14 @@ module.exports.updateProductArray = (id)=>{
       values.splice(0, 0, +prodId)
       values.splice(1,0, +id)
       updateProduct(prodId, columns, values);
-    })
+    }), function(err, choice) {
+      if(err) {
+        return reject(err)
+      }
+      else {
+        resolve (this);
+      } 
+    }
   })
 }
 
@@ -316,6 +381,7 @@ module.exports.removeProduct = (id)=>{
     console.log(addProdHeader);
     console.log('Delete a product')
     console.log(addProdHeader);
+  return new Promise( (resolve, reject) => {
 
     getProdsNotOnOrder()
     .then((prods)=>{
@@ -324,5 +390,13 @@ module.exports.removeProduct = (id)=>{
       return subMenuDeletePrompt(prods)
     }).then((chosenProd)=>{
       return deleteProduct(chosenProd)
-    })
+    }),  function(err, choice) {
+      if(err) {
+        return reject(err)
+      }
+      else {
+        resolve (this);
+      } 
+    }
+  })
 }
