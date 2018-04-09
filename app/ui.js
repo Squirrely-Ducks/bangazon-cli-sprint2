@@ -71,6 +71,7 @@ let mainMenuHandler = (err, userInput) => {
     // Remove a Product to Sell
     
       removeProduct(id)
+      module.exports.displayWelcome();
       break;
   }
 };
