@@ -13,7 +13,7 @@ module.exports.build_order_product_table = () => {
                     order_id INTEGER,
                     product_id INTEGER,
                     FOREIGN KEY (order_id) REFERENCES [order](order_id) ON DELETE CASCADE,
-                    FOREIGN KEY (product_id) REFERENCES product(prod_id) ON DELETE CASCADE
+                    FOREIGN KEY (product_id) REFERENCES product(product_id) ON DELETE CASCADE
                 )`, (err) => {
                     if (err) reject(err);
                     resolve(insert_order_product_data());

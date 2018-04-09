@@ -17,36 +17,50 @@ module.exports.promptNewCustomer = () => {
       name: 'first_name',
       description: 'Enter customer name (First)',
       type: 'string',
+      pattern: /^[a-zA-Z]+$/,
+      message: 'please enter a valid first name',
       required: true
     }, {
       name: 'last_name',
       description: 'Enter last name (Last)',
       type: 'string',
+      pattern: /^[a-zA-Z]+$/,
+      message: 'please enter a valid last name', 
       required: true
     },{
       name: 'street',
       description: 'Enter street address',
       type: 'string',
+        pattern: /^/,
+      message: 'please enter a valid address', 
       required: true
     }, {
       name: 'city',
       description: 'Enter city',
       type: 'string',
+      pattern: /^[a-zA-Z]+$/,
+      message: 'please enter a valid city',            
       required: true
     }, {
       name: 'state',
       description: 'Enter state (KY)',
       type: 'string',
+        pattern: /\b[A-Z]{2}\b/,
+      message: 'please enter a valid state abbreviation',      
       required: true
     }, {
       name: 'zip',
       description: 'Enter postal code',
       type: 'string',
+      pattern: /\b\d{5}\b/,
+      message: 'please enter a valid zip code',
       required: true
     }, {
       name: 'phone',
       description: 'Enter phone number (xxx-yyy-zzzz)',
       type: 'string',
+      pattern: /^\d{3}-\d{3}-\d{4}$/,
+      message: 'Please enter a valid phone number',
       required: true
     }], function(err, results) {
       if (err) return reject(err);
