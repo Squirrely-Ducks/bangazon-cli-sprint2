@@ -57,23 +57,19 @@ let mainMenuHandler = (err, userInput) => {
       // Add a Product to Sell
       addNewProduct(id)
       //main menus prompts
-      module.exports.displayWelcome();
+      
       break;
   
     case "7":
       // Update a Product to Sell
       
       updateProductArray(id)
-      .then(()=>{
-        module.exports.displayWelcome();
-      })
       break;
 
     case "8":
     // Remove a Product to Sell
     
       removeProduct(id);
-      module.exports.displayWelcome();
       break;
   }
 };
