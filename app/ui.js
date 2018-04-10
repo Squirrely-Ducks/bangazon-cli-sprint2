@@ -16,7 +16,7 @@ const { new_customer } = require("./models/Customer");
 const db = new Database(path.join(__dirname, "..", "db", "bangazon.sqlite"));
 const { setActiveCustomer, getActiveCustomer } = require("./activeCustomer");
 const {promptAddPayment,createPayment} = require("./controllers/addpaymentCtrl");
-const {promptAddToCart, addNewProduct, updateProductArray, updateProducts, removeProduct} = require("./controllers/productCtrl");
+
 
 
 
