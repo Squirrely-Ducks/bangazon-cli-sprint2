@@ -48,7 +48,7 @@ You will create a series of prompts that will allow the user to create various t
 
 * After a payment type is selected, users are given a prompt that an order has successfully been completed and taken back to the main menu
 
->6 Add a Product to Sell
+>6. Add a Product to Sell
 
 * User must select a product type id 1-10
 
@@ -62,7 +62,7 @@ You will create a series of prompts that will allow the user to create various t
 
 * User is then take back to the main menu
 
->7 Update a Product
+>7. Update a Product
 * If a user does not have a product that is not on an order, user will be prompted back to the main menu
 
 * If user has products that are not on an order, user will be prompted to select from a list of products to update.
@@ -79,7 +79,7 @@ You will create a series of prompts that will allow the user to create various t
 
 * User is then prompted to back to the main menu
 
->8 Remove a Customer Product From Inventory
+>8. Remove a Customer Product From Inventory
 
 * If all products are on order, User cannot update a product
 
@@ -87,9 +87,9 @@ You will create a series of prompts that will allow the user to create various t
 
 * User is then prompted that the product has been deleted and is prompted with the main menu
 
->9 Get revenue report
+>9. Get revenue report
 
 * User is prompted with the revenue for all product they are selling
 
->10 
+>10. 
 * User is prompted with a cash money baller exit from #Bangazon
