@@ -16,6 +16,13 @@ const { new_customer } = require("./models/Customer");
 const { getActiveOrder, getAllOrderProduct, completeOrder } = require("./models/Order");
 const db = new Database(path.join(__dirname, "..", "db", "bangazon.sqlite"));
 const { setActiveCustomer, getActiveCustomer } = require('./activeCustomer')
+const { promptAddPayment, createPayment } = require("./controllers/addpaymentCtrl");
+
+
+
+
+
+
 
 const headerDivider = `${colors.america(
     "*********************************************************"
@@ -25,8 +32,6 @@ prompt.start();
 
 // Main Menu Options for CLI
 let mainMenuHandler = (err, userInput) => {
-
-    let id = getActiveCustomer().id
 
     // Allows user to Create a new customer and push to db
     switch (userInput.choice) {
@@ -38,17 +43,22 @@ let mainMenuHandler = (err, userInput) => {
                     return new_customer(custData);
                 })
                 .then(() => {
-                    module.exports.displayWelcome();
+                    displayWelcome();
                 });
             break;
         // Allows user to select the customer to make active
         case "2":
-            promptAllCustomers()
-                .then((customerSelect) => {
-                    setActiveCustomer(customerSelect.customer_id);
-                    module.exports.displayWelcome();
-                })
+            promptAllCustomers().then(customerSelect => {
+                setActiveCustomer(customerSelect.customer_id);
+                displayWelcome();
+            });
             break;
+        case "3":
+            promptAddPayment().then(paydata => {
+                createPayment(paydata);
+                displayWelcome();
+            });
+            break
         // Add product to shopping cart
         case "4":
             promptAddToCart(id)
@@ -68,13 +78,11 @@ let mainMenuHandler = (err, userInput) => {
 
         case "7":
             // Update a Product to Sell
-
             updateProductArray(id)
             break;
 
         case "8":
             // Remove a Product to Sell
-
             removeProduct(id);
             break;
     }
