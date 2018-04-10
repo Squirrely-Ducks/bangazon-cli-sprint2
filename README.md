@@ -124,3 +124,100 @@ Bangazon Corp: type:  1
 You have successfuly completed this order. Have a nice day!
 ```
 
+
+>5. Complete An order
+* User must have an open order where payment type is null
+
+* If the user does not have an order open, the user will be prompted to start an order to complete.
+
+* If the user does not have a payment type on file, the user will be prompted to add a payment type before completing an order.
+
+* Users are prompted with y/n to complete an order.
+
+* Users are then prompted to select a payment type
+
+* After a payment type is selected, users are given a prompt that an order has successfully been completed and taken back to the main menu
+
+>6. Add a Product to Sell
+``` 
+*********************************************************
+Add a product
+*********************************************************
+Bangazon Corp: Enter product type id:  2
+Bangazon Corp: Enter Product Title:  A cool jelly bean
+Bangazon Corp: Enter price in the format xx.yy:  4300.12
+Bangazon Corp: Enter product description:  This is a cookie jelly bean
+Bangazon Corp: Enter the quantity to sell:  7000
+* User must select a product type id 1-10 
+```
+
+* User must enter a Product Title
+
+* User must enter a price   `e.g. $12.12`
+
+* User must enter a description
+
+* User must enter a quantity of the product they want to sell
+
+* User is then take back to the main menu
+
+>7. Update a Product
+```
+Please select a product to update
+12. A cool jelly bean
+Bangazon Corp: Please make a selection:  12
+Bangazon Corp: Enter product type id:  3
+Bangazon Corp: Enter Product Title:  A not cool jelly bean
+Bangazon Corp: Enter price in the format xx.yy:  80000.00
+Bangazon Corp: Enter product description:  This jelly bean is a cookie
+Bangazon Corp: Enter the quantity to sell:  456
+```
+* If a user does not have a product that is not on an order, user will be prompted back to the main menu
+
+* If user has products that are not on an order, user will be prompted to select from a list of products to update.
+
+* User is then prompted to update the product type id
+
+* User is then prompted to update the Product Title
+
+* User is then prompted to update the price of the product
+
+* User is then prompted to update the product description
+
+* User is then prompted to update the quantity of the product
+
+* User is then prompted to back to the main menu
+
+>8. Remove a Customer Product From Inventory
+
+* If all products are on order, User cannot update a product
+
+* If there a products not on orders, user is then prompted to select a product to delete
+
+* User is then prompted that the product has been deleted and is prompted with the main menu
+
+>9. Get revenue report
+```
+Bangazon Corp: Please make a selection:  9
+Revenue report for Maurice Moss
+
+Order #2
+--------------------------------------------------
+this Thing                           1    $12.12
+
+Order Total: $12.12
+
+Order #8
+--------------------------------------------------
+Refined Granite Shoes              1    $385.00
+
+Order Total: $385.00
+
+TOTAL REVENUE: $397.12
+Bangazon Corp: Would you like to go back to main menu? (Y/N):
+```
+* User is prompted with the revenue for all product they are selling
+
+* User is then asked if they would like to go back to main menu. If Yes, main menu is prompted. If not, user is exited from #Bangazon is fashionable style
+>10. 
+* User is prompted with a cash money baller exit from #Bangazon
