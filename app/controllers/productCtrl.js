@@ -10,21 +10,26 @@ const { get_all_customers, get_one_customer } = require('../models/Customer');
 const { newProduct,getAllProducts, getOneProduct, updateProduct, deleteProduct,getAllProductsByCust, getOneProductByCust, getProdsNotOnOrder  } = require('../models/Products');
 const { createNewOrder, getAllOrders, getOneOrder, getAllOrderProduct, addOrderProd, deleteOrder, deleteOrderProd, completeOrder } = require('../models/Order');
 const {setActiveCustomer, getActiveCustomer } = require('../activeCustomer');
+// const {validator} = require('../validator');
+      
 
 
+colors.setTheme({
+  
+  input: 'grey',
+  prompt: 'red',
+  info: 'green',
+  data: 'grey',
+  help: 'cyan',
+  warn: 'yellow',
+  debug: 'blue',
+  error: 'blue'
+});
 //HELPER FUNCTIONS
-
 // get current time for create date
 const time = ()=>{
-   let  now = new Date();
-   return now.toISOString()
-}
-
-// validate active cusotmer is chosen
-const validator = (id)=>{
-  if (null === id){
-      console.log(`${colors.bgRed(`please set an active customer`)}`)
-  } else return id
+  let  now = new Date();
+  return now.toISOString()
 }
 
 //filter products not on orders
@@ -49,24 +54,36 @@ const openOrderFilter = (orders)=>{
       }
   });
     if (orders.length === 0){
-      console.log("sorry all customer products are on orders data cannot be altered")
+      console.log("sorry all customer orders are closed")
     } else {}
     return openArray;
 }
 
+//filter products with no quantity
+const filterNoneAvail = (prodArray)=>{
+  let availArray = [];
+  prodArray.forEach(prod=>{
+    if (prod.quantity > 1){
+      availArray.push(prod)
+    }
+  })
+  return availArray;
+}
+///////////////////
+
 
 //UI LAYOUT
-
 let addProdHeader = `${colors.america(
     `*********************************************************`
   )}`;
 
-
-
-  
 //// PROMPTS FOR UI 
-let promptNewProduct = () => {
-    return new Promise( (resolve, reject) => {
+module.exports.promptNewProduct = ()=>{
+    console.log(addProdHeader);
+    console.log('Add a product');
+    console.log(addProdHeader);
+
+    return new Promise( (resolve, reject)=>{
       prompt.get([{
         name: 'product_type_id',
         description: 'Enter product type id',
@@ -107,10 +124,10 @@ let promptNewProduct = () => {
         resolve(results);
       })
     });
-  };
+};
 
-  let promptUpdateProduct = () => {
-    return new Promise( (resolve, reject) => {
+module.exports.promptUpdateProduct = ()=>{
+    return new Promise( (resolve, reject)=>{
       prompt.get([{
         name: 'product_type_id',
         description: 'Enter product type id',
@@ -151,10 +168,10 @@ let promptNewProduct = () => {
         resolve(results);
       })
     });
-  };
+};
 
-  let subMenuPrompt = (prods)=>{
-    return new Promise( (resolve, reject) => {
+module.exports.subMenuPrompt = (prods)=>{
+    return new Promise( (resolve, reject)=>{
       console.log("Please select a product to update")
     for(let i = 0; i < prods.length; i++){
       console.log(`${prods[i].product_id}. ${prods[i].title}`);
@@ -163,21 +180,23 @@ let promptNewProduct = () => {
       ([{
         name: "product_id",
         description: "Please make a selection",
+        pattern:/^-?\d+\.?\d*$/,
+        // conform: function(v){return !(+v > prods.length || +v < 1)},
+        message: "Please choose a number from the above list" 
       }],
       function(err,product) {
         if(err) {
           return reject(err)
         }
         else {
-          // console.log(product);
           resolve (product.product_id);
         } 
       })
     })
-  }
+}
 
-  let subMenuDeletePrompt = (prods)=>{
-    return new Promise( (resolve, reject) => {
+module.exports.subMenuDeletePrompt = (prods)=>{
+    return new Promise( (resolve, reject)=>{
       console.log("Please select a product to delete")
     for(let i = 0; i < prods.length; i++){
       console.log(`${prods[i].product_id}. ${prods[i].title}`);
@@ -185,6 +204,7 @@ let promptNewProduct = () => {
     prompt.get
       ([{
         name: "product_id",
+        pattern:/^-?\d+\.?\d*$/,
         description: "Please make a selection",
       }],
       function(err,product) {
@@ -192,23 +212,39 @@ let promptNewProduct = () => {
           return reject(err)
         }
         else {
-          // console.log(product);
           resolve (product.product_id);
         } 
       })
     })
-  }
+}
 
-  let subMenuChooseOrderPrompt = (openOrders)=>{
+module.exports.subMenuChooseOrderPrompt = (openOrders)=>{
     return new Promise( (resolve, reject) => {
       console.log("Please select an order to add to")
+
+      let idArray =[]
+      for(let i = 0; i<openOrders.length;i++){
+        idArray.push(openOrders[i].order_id)
+      }
+      // let str = idArray.toString();
+      // let regexp = `/[${str}]/gi`;
+      // let matches_array = str.match(regexp);
+      // console.log(str,regexp, matches_array)
+      
+      console.log(idArray);
+
     for(let i = 0; i < openOrders.length; i++){
-      console.log(`Order numer: ${openOrders[i].order_id} `);
+      console.log(`Order number: ${openOrders[i].order_id} `);
     }
     prompt.get
       ([{
         name: "order_id",
         description: "Please make a selection",
+        pattern: /^-?\d+\.?\d*$/,
+        conform: function(v){return !(+v == idArray.includes(+v))},
+        // conform: function(v){return !(+v > prods.length || +v < 1)},
+        
+        message: "Please choose a number from the above list" 
       }],
       function(err,order) {
         if(err) {
@@ -219,18 +255,24 @@ let promptNewProduct = () => {
         } 
       })
     })
-  }
+}
 
-  let subMenuChooseProductPrompt = (products)=>{
+module.exports.subMenuChooseProductPrompt = (products)=>{
+    console.log(addProdHeader);    
     return new Promise( (resolve, reject) => {
       console.log("Please select a product to add to order")
+
+
     for(let i = 0; i < products.length; i++){
       console.log(`${products[i].product_id}. ${products[i].title}: ${products[i].description}, ONLY $${products[i].price}! `);
     }
     prompt.get
       ([{
         name: "product_id",
+        pattern: /^-?\d+\.?\d*$/,        
         description: "Please make a selection",
+        // conform: function(v){return !(v != matches_array)},
+        
       }],
       function(err, product) {
         if(err) {
@@ -241,108 +283,124 @@ let promptNewProduct = () => {
         } 
       })
     })
-  }
+}
 
-//////// FUNCTIONS FOR UI
-module.exports.promptAddToCart = (id) => {
-  let orderId;
-  let prodId;
-    // validator(id)
-    console.log(addProdHeader);
-
-    //GETTING ORDERS TO UPDATE
-    getAllOrders(id)
-    .then((orders)=>{
-      return openOrderFilter(orders); 
-    }).then((openOrders)=>{
-      return subMenuChooseOrderPrompt(openOrders)
-    }).then((orderChoiceId)=>{
-      orderId = orderChoiceId
-
-      //refactor here, new chain
-      return getAllProducts()
-    }).then((products)=>{
-      return subMenuChooseProductPrompt(products)
-    }).then((productId)=>{
-        return prodId = productId;
-      //refactor here, new chain
-        
-    }).then((data)=>{
-      let order_id = orderId;
-      let product_id = prodId;
-      return addOrderProd( {order_id, product_id} )
-    }).then((data)=>{
-      //update quantity
-      return getOneProduct((prodId))
-    }).then((data)=>{
-        
-      let columns = Object.keys(data);      
-      let values = Object.values(data);
-      values.splice(7,1,(data.quantity - 1))
-      return updateProduct(+prodId, columns, values)
-    })
-  
-
-};
-
-
-  //ADDING A PRODUCT
-module.exports.addNewProduct = (id)=>{
-    console.log(addProdHeader);
-    console.log('Add a product');
-    console.log(addProdHeader);
-    promptNewProduct(id)
-    .then((data)=>{
-        data.seller_id = id;
-        data.create_date = time();
-        return data
-    }).then((data)=>{
-        newProduct(data.seller_id, data.product_type_id, data.title, data.price, data.description, data.create_date, data.quantity);
+module.exports.subMenuConfirmPrompt = (products)=>{
+  console.log(addProdHeader);
+  return new Promise( (resolve, reject) => {
+    prompt.get
+      ([{
+        name: "Complete",
+            conform: function (v) { return v === "y" || v === "n" }, 
+            message: "Please choose to y/n to complete this order or not"
+      }],
+      function(err, choice) {
+        if(err) {
+          return reject(err)
+        }
+        else {
+          resolve (choice);
+        } 
+      })
     })
 }
-     
-    //UPDATING A PRODUCT
-module.exports.updateProductArray = (id)=>{  
-  return new Promise( (resolve, reject) => {
-  let prodId;
+///////////////////
 
+//////// FUNCTIONS FOR UI
+//ADDING PRODUCTS TO CART 
+module.exports.promptAddToCart = (id)=>{
+  console.log(addProdHeader);
+  return getAllOrders(id)
+        .then((orders)=>{
+          return openOrderFilter(orders); 
+        })
+}
+
+module.exports.getProdArray = ()=>{
+  return getAllProducts()
+          .then((products)=>{
+            return filterNoneAvail(products)
+          })  
+}
+
+module.exports.prepData =  (orderId,prodId)=>{
+  let order_id = orderId;
+  let product_id = prodId;
+  return addOrderProd( {order_id, product_id} )
+}
+
+module.exports.adjustQuantity = (prodId)=>{
+  return getOneProduct(prodId)
+}
+    
+module.exports.sendNewQuantity = (data,prodId)=>{   
+  let columns = Object.keys(data);      
+  let values = Object.values(data);
+  values.splice(7,1,(data.quantity - 1))
+  return updateProduct(+prodId, columns, values)
+  .then(()=>{
+    return console.log("Product added to order Successfully")    
+  })
+}
+///////////////////
+
+//CREATING A PRODUCT  
+module.exports.sendNewProductData = (data,id)=>{
+  data.seller_id = id;
+  data.create_date = time();
+  newProduct(data.seller_id, data.product_type_id, data.title, data.price, data.description, data.create_date, data.quantity)
+  .then(()=>{
+    return console.log("You added a new Product!")
+  })
+}
+///////////////////
+
+//UPDATING A PRODUCT
+//GETS ALL AVAILABLE PRODUCTS TO UPDATE
+module.exports.updateProductArray = (id)=>{  
   console.log(addProdHeader);
   console.log('Update a product');
   console.log(addProdHeader);
-
-  getProdsNotOnOrder()
-    .then((prods)=>{
-      return productFilter(prods,id)
-    }).then(prods=>{
-      return subMenuPrompt(prods)
-    }).then((choosenProd)=>{
-      prodId = choosenProd;
-      return promptUpdateProduct()
-    }).then((data)=>{
-      let columns = Object.keys(data);
-      columns.splice(0, 0, "product_id")
-      columns.splice(1,0, "seller_id")
-      let values = Object.values(data);
-      values.splice(0, 0, +prodId)
-      values.splice(1,0, +id)
-      updateProduct(prodId, columns, values);
-    })
-  })
+  return getProdsNotOnOrder()
+        .then((prods)=>{
+        return productFilter(prods,id)
+        })
 }
 
+//PASSES IN UPDATED PRODUCT TO MODELER       
+module.exports.sendUpdateProd = (data,prodId,id)=>{
+  let columns = Object.keys(data);
+  columns.splice(0, 0, "product_id")
+  columns.splice(1,0, "seller_id")
+  let values = Object.values(data);
+  values.splice(0, 0, +prodId)
+  values.splice(1,0, +id)
+  updateProduct(prodId, columns, values)
+  .then(()=>{
+    return console.log("You added that product!")
+  });
+}
+///////////////////
 
 //DELETING A PRODUCT
+//GETS ALL AVAILABLE PRODUCTS TO DELETE
 module.exports.removeProduct = (id)=>{
-    console.log(addProdHeader);
-    console.log('Delete a product')
-    console.log(addProdHeader);
-
-    getProdsNotOnOrder()
-    .then((prods)=>{
-      return productFilter(prods,id)
-    }).then(prods=>{
-      return subMenuDeletePrompt(prods)
-    }).then((chosenProd)=>{
-      return deleteProduct(chosenProd)
-    })
+  console.log(addProdHeader);
+  console.log('Delete a product')
+  console.log(addProdHeader);
+  return getProdsNotOnOrder()
+  .then((prods)=>{
+    return productFilter(prods,id)
+  })
 }
+//PASSES IN PROMPT CHOICE TO MODELER       
+module.exports.deleteProd = (chosenProd)=>{
+  console.log(`You deleted a product!`)
+  return deleteProduct(chosenProd)
+}    
+///////////////////
+
+
+
+
+
