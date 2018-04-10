@@ -32,7 +32,7 @@ prompt.start();
 
 // Main Menu Options for CLI
 let mainMenuHandler = (err, userInput) => {
-
+    let id = getActiveCustomer().id
     // Allows user to Create a new customer and push to db
     switch (userInput.choice) {
         case "1":
@@ -89,7 +89,7 @@ let mainMenuHandler = (err, userInput) => {
 };
 // Displays the actual main menu in console
 const displayWelcome = () => {
-
+    ''
     return new Promise((resolve, reject) => {
         console.log(`
   ${headerDivider}
