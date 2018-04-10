@@ -19,7 +19,7 @@ const {promptAddPayment,createPayment} = require("./controllers/addpaymentCtrl")
 
 
 
-
+//HELPER FUNCTIONS
 function validator(id){
   if (!id){
       console.log(`${colors.bgRed(`please set an active customer`)}`);
@@ -27,8 +27,23 @@ function validator(id){
       // setActiveCustomer(customerSelect.customer_id);
   } 
 };
-
-
+const backToMenu = () => {
+    prompt.get(
+      {
+       name: "selection",
+       description: "Would you like to go back to main menu? (Y/N)",
+      message: "Please enter Y/N",
+      pattern: /[YyNn]/
+    },
+    (err, { selection }) => {
+      if (selection.toUpperCase() === "Y") {
+        displayWelcome();
+      } else {
+        return;
+      }
+    }
+  );
+};
 // Start Program
 prompt.start();
 
