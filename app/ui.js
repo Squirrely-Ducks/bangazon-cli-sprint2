@@ -9,6 +9,7 @@ const { Database } = require("sqlite3").verbose();
 prompt.message = colors.blue("Bangazon Corp");
 
 // app modules
+const { promptAddToCart, addNewProduct, updateProductArray, updateProducts, removeProduct } = require("./controllers/productCtrl");
 const { promptNewCustomer, promptAllCustomers } = require("./controllers/customerCtrl");
 const { promptCompleteOrder } = require("./controllers/orderCtrl");
 const { new_customer } = require("./models/Customer");
@@ -24,7 +25,9 @@ prompt.start();
 
 // Main Menu Options for CLI
 let mainMenuHandler = (err, userInput) => {
-    let acId = getActiveCustomer().id;
+
+    let id = getActiveCustomer().id
+
     // Allows user to Create a new customer and push to db
     switch (userInput.choice) {
         case "1":
@@ -35,7 +38,7 @@ let mainMenuHandler = (err, userInput) => {
                     return new_customer(custData);
                 })
                 .then(() => {
-                    displayWelcome();
+                    module.exports.displayWelcome();
                 });
             break;
         // Allows user to select the customer to make active
@@ -43,13 +46,36 @@ let mainMenuHandler = (err, userInput) => {
             promptAllCustomers()
                 .then((customerSelect) => {
                     setActiveCustomer(customerSelect.customer_id);
-                    displayWelcome();
+                    module.exports.displayWelcome();
                 })
             break;
+        // Add product to shopping cart
+        case "4":
+            promptAddToCart(id)
+            break;
         case "5":
-            promptCompleteOrder(acId).then(completed => {
+            promptCompleteOrder(id).then(completed => {
                 displayWelcome();
             });
+            break;
+
+        case "6":
+            // Add a Product to Sell
+            addNewProduct(id)
+            //main menus prompts
+
+            break;
+
+        case "7":
+            // Update a Product to Sell
+
+            updateProductArray(id)
+            break;
+
+        case "8":
+            // Remove a Product to Sell
+
+            removeProduct(id);
             break;
     }
 };
@@ -67,17 +93,20 @@ const displayWelcome = () => {
   ${colors.america("3.")} ${colors.white("Create a payment option")}
   ${colors.america("4.")} ${colors.white("Add product to shopping cart")}
   ${colors.america("5.")} ${colors.white("Complete an order")}
-  ${colors.america("6.")} ${colors.white("Get revenue rep")}
-  ${colors.america("7.")} ${colors.white("Leave Bangazon!")}`);
+  ${colors.america("6.")} ${colors.white("Add a Product to Sell")}
+  ${colors.america("7.")} ${colors.white("Update a Product to Sell")}
+  ${colors.america("8.")} ${colors.white("Remove a Customer Product from inventory")}
+  ${colors.america("9.")} ${colors.white("Get revenue rep")}
+  ${colors.america("10.")} ${colors.white("Leave Bangazon!")}`);
         prompt.get(
-            [{
-                name: "choice",
-                description: "Please make a selection"
-            }],
+            [
+                {
+                    name: "choice",
+                    description: "Please make a selection"
+                }
+            ],
             mainMenuHandler
         );
     });
 };
-module.exports = {
-    displayWelcome
-};
+
