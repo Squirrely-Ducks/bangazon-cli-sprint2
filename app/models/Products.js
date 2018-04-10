@@ -92,6 +92,21 @@ module.exports.updateProduct = (id, columns, values) => {
     });
 };
 
+
+module.exports.getProdsNotOnOrder = ()=>{
+    return new Promise((resolve, reject) =>{ 
+      db.all(
+        `SELECT *
+        FROM product
+         WHERE product_id 
+         NOT IN (SELECT order_id FROM order_product)`,
+        (err, product) =>{
+            if(err) return reject(err);
+            resolve(product);
+        }); 
+    });
+};
+
 module.exports.deleteProduct = (id) => {
     return new Promise((resolve, reject) => {
         db.run (` DELETE FROM product

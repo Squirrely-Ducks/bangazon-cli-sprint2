@@ -9,10 +9,8 @@ const { Database } = require("sqlite3").verbose();
 prompt.message = colors.blue("Bangazon Corp");
 
 // app modules
-const {
-  promptNewCustomer,
-  promptAllCustomers
-} = require("./controllers/customerCtrl");
+
+const {promptNewCustomer,promptAllCustomers} = require("./controllers/customerCtrl");
 const { new_customer } = require("./models/Customer");
 const db = new Database(path.join(__dirname, "..", "db", "bangazon.sqlite"));
 const { setActiveCustomer, getActiveCustomer } = require("./activeCustomer");
@@ -47,7 +45,6 @@ let mainMenuHandler = (err, userInput) => {
         module.exports.displayWelcome();
       });
       break;
-    //Allow User to Show Revenue Report
     case "3":
       promptAddPayment().then(paydata => {
         createPayment(paydata);
@@ -77,6 +74,7 @@ let mainMenuHandler = (err, userInput) => {
     
       removeProduct(id);
       break;
+//Allow User to Show Revenue Report
     case "9":
       displayRevReport().then(done => {
           if (!done) {
@@ -142,5 +140,4 @@ const backToMenu = () => {
     }
   );
 };
-
 
