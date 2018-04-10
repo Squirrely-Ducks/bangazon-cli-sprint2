@@ -68,28 +68,29 @@ module.exports.promptCompleteOrder = (acId) => {
         let actOrder;
         getActiveOrder(acId)
             .then(order => {
-                if (order === undefined) throw 'There is no open order for this customer'
+                if (order === undefined) throw (`${colors.bgRed("There is no open order for this customer")}`)
                 else {
                     actOrder = order;
                     return getAllOrderProduct(order.order_id)
                 }
             }).then(prods => {
-                if (prods.length < 1) throw 'There are no products on this order. Please add a product before completing order';
+                if (prods.length < 1) throw (`${colors.bgRed("There are no products on this order. Please add a product before completing order")}`)
                 else {
                     return subCompleteOrder(prods)
                 }
             }).then(choice => {
-                if (choice.Complete === 'n') throw 'You have chosen not to complete this order';
+                if (choice.Complete === 'n') throw (`${colors.bgRed("You have chosen not to complete this order")}`)
                 else return getTypesByCustomer(actOrder.order_id);
             })
             .then(types => {
-                if (types.length < 1) throw 'This customer does not have a saved payment account. Please add one to continue completing this order.';
+                if (types.length < 1) throw (`${colors.bgRed("This customer does not have a saved payment account. Please add one to continue completing this order.")}`)
                 else return promptMakePayment(types)
 
             }).then(type => {
-                if (type === undefined) throw 'You shouldnt be seeing this, if youre seeing this, something went horribly wrong'
+                if (type === undefined) throw (`${colors.bgRed("You shouldnt be seeing this, if youre seeing this, something went horribly wrong")}`)
                 else {
-                    console.log("You have successfuly completed this order. Have a nice day!")
+                   console.log(`${colors.bgBlue("You have successfuly completed this order. Have a nice day!")}`)
+                    
                     resolve(completeOrder(actOrder.order_id, type.type))
                 }
             })
