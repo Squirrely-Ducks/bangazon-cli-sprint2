@@ -130,7 +130,6 @@ const backToMenu = () => {
       pattern: /[YyNn]/
     },
     (err, { selection }) => {
-      if (err) console.log("ERRRRRRRR", err);
       if (selection.toUpperCase() === "Y") {
         module.exports.displayWelcome();
       } else {
