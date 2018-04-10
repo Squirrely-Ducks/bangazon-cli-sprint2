@@ -38,7 +38,7 @@ const productFilter = (products,id)=>{
   products.forEach(product=>{
     if (+id === +product.seller_id ){
       prodArray.push(product);
-    } else { console.log("sorry all customer products are on orders data cannot be altered");}
+    } else { console.log("Sorry all customer products are on orders data cannot be altered");}
   });
   return prodArray
 }
@@ -139,8 +139,8 @@ module.exports.promptUpdateProduct = ()=>{
         name: 'title',
         description: 'Enter Product Title',
         type: 'string',
-        pattern: /^[a-zA-Z]+\s+/,
-        message: 'please enter a valid title',
+        // pattern: /^[a-zA-Z]+\s+/,
+        // message: 'please enter a valid title',
         required: true
       }, {
         name: 'price',
@@ -153,8 +153,8 @@ module.exports.promptUpdateProduct = ()=>{
         name: 'description',
         description: 'Enter product description',
         type: 'string',
-        pattern: /^[a-zA-Z]+\s+/,
-        message: 'please enter a valid description',
+        // pattern: /^[a-zA-Z]+\s+/,
+        // message: 'please enter a valid description',
         required: true
       }, {
         name: 'quantity',
@@ -173,15 +173,18 @@ module.exports.promptUpdateProduct = ()=>{
 module.exports.subMenuPrompt = (prods)=>{
     return new Promise( (resolve, reject)=>{
       console.log("Please select a product to update")
+
+      let idArray=[];
     for(let i = 0; i < prods.length; i++){
+      idArray.push(prods[i].product_id)
       console.log(`${prods[i].product_id}. ${prods[i].title}`);
     }
     prompt.get
       ([{
         name: "product_id",
         description: "Please make a selection",
-        pattern:/^-?\d+\.?\d*$/,
-        // conform: function(v){return !(+v > prods.length || +v < 1)},
+        pattern: /^-?\d+\.?\d*$/,
+        conform: function(v){return (idArray.includes(+v))},        
         message: "Please choose a number from the above list" 
       }],
       function(err,product) {
@@ -198,7 +201,10 @@ module.exports.subMenuPrompt = (prods)=>{
 module.exports.subMenuDeletePrompt = (prods)=>{
     return new Promise( (resolve, reject)=>{
       console.log("Please select a product to delete")
+
+      let idArray = [];
     for(let i = 0; i < prods.length; i++){
+      idArray.push(prods[i].product_id)
       console.log(`${prods[i].product_id}. ${prods[i].title}`);
     }
     prompt.get
@@ -206,6 +212,9 @@ module.exports.subMenuDeletePrompt = (prods)=>{
         name: "product_id",
         pattern:/^-?\d+\.?\d*$/,
         description: "Please make a selection",
+        conform: function(v){return (idArray.includes(+v))},        
+        message: "Please choose a number from the above list" 
+        
       }],
       function(err,product) {
         if(err) {
@@ -223,17 +232,9 @@ module.exports.subMenuChooseOrderPrompt = (openOrders)=>{
       console.log("Please select an order to add to")
 
       let idArray =[]
-      for(let i = 0; i<openOrders.length;i++){
-        idArray.push(openOrders[i].order_id)
-      }
-      // let str = idArray.toString();
-      // let regexp = `/[${str}]/gi`;
-      // let matches_array = str.match(regexp);
-      // console.log(str,regexp, matches_array)
-      
-      console.log(idArray);
-
+     
     for(let i = 0; i < openOrders.length; i++){
+      idArray.push(openOrders[i].order_id)      
       console.log(`Order number: ${openOrders[i].order_id} `);
     }
     prompt.get
@@ -241,9 +242,7 @@ module.exports.subMenuChooseOrderPrompt = (openOrders)=>{
         name: "order_id",
         description: "Please make a selection",
         pattern: /^-?\d+\.?\d*$/,
-        conform: function(v){return !(+v == idArray.includes(+v))},
-        // conform: function(v){return !(+v > prods.length || +v < 1)},
-        
+        conform: function(v){return (idArray.includes(+v))},        
         message: "Please choose a number from the above list" 
       }],
       function(err,order) {
@@ -262,16 +261,19 @@ module.exports.subMenuChooseProductPrompt = (products)=>{
     return new Promise( (resolve, reject) => {
       console.log("Please select a product to add to order")
 
-
+      let idArray = [];
     for(let i = 0; i < products.length; i++){
+      idArray.push(products[i].product_id)
       console.log(`${products[i].product_id}. ${products[i].title}: ${products[i].description}, ONLY $${products[i].price}! `);
+
     }
     prompt.get
       ([{
         name: "product_id",
         pattern: /^-?\d+\.?\d*$/,        
         description: "Please make a selection",
-        // conform: function(v){return !(v != matches_array)},
+        conform: function(v){return (idArray.includes(+v))},
+        message: "Please choose a number for the list"
         
       }],
       function(err, product) {
@@ -306,10 +308,13 @@ module.exports.subMenuConfirmPrompt = (products)=>{
 }
 ///////////////////
 
+
+
 //////// FUNCTIONS FOR UI
 //ADDING PRODUCTS TO CART 
 module.exports.promptAddToCart = (id)=>{
   console.log(addProdHeader);
+  
   return getAllOrders(id)
         .then((orders)=>{
           return openOrderFilter(orders); 
@@ -381,6 +386,9 @@ module.exports.sendUpdateProd = (data,prodId,id)=>{
   });
 }
 ///////////////////
+
+
+
 
 //DELETING A PRODUCT
 //GETS ALL AVAILABLE PRODUCTS TO DELETE
