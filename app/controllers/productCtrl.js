@@ -180,7 +180,7 @@ module.exports.subMenuPrompt = (prods)=>{
       ([{
         name: "product_id",
         description: "Please make a selection",
-        pattern: /[^0-9]/,
+        pattern:/^-?\d+\.?\d*$/,
         // conform: function(v){return !(+v > prods.length || +v < 1)},
         message: "Please choose a number from the above list" 
       }],
@@ -204,7 +204,7 @@ module.exports.subMenuDeletePrompt = (prods)=>{
     prompt.get
       ([{
         name: "product_id",
-        pattern: /[^0-9]/,
+        pattern:/^-?\d+\.?\d*$/,
         description: "Please make a selection",
       }],
       function(err,product) {
@@ -238,7 +238,7 @@ module.exports.subMenuChooseOrderPrompt = (openOrders)=>{
       ([{
         name: "order_id",
         description: "Please make a selection",
-        pattern: /^\d+$/,
+        pattern: /^-?\d+\.?\d*$/,
         // conform: function(v){return !(v != matches_array)},
         message: "Please choose a number from the above list" 
       }],
