@@ -124,9 +124,6 @@ Bangazon Corp: type:  1
 You have successfuly completed this order. Have a nice day!
 ```
 
-<<<<<<< HEAD
-1. Start with writing unit tests. As a group, determine the core functionality of the application. Define classes, controllers and methods that you think you need to build. Do that before writing the implementation code for core logic. DO NOT WRITE TESTS FOR THE USER INTERFACE (menu and prompts).
-1. All classes and methods must be fully documented.
 
 >5. Complete An order
 * User must have an open order where payment type is null
@@ -142,8 +139,17 @@ You have successfuly completed this order. Have a nice day!
 * After a payment type is selected, users are given a prompt that an order has successfully been completed and taken back to the main menu
 
 >6. Add a Product to Sell
-
-* User must select a product type id 1-10
+``` 
+*********************************************************
+Add a product
+*********************************************************
+Bangazon Corp: Enter product type id:  2
+Bangazon Corp: Enter Product Title:  A cool jelly bean
+Bangazon Corp: Enter price in the format xx.yy:  4300.12
+Bangazon Corp: Enter product description:  This is a cookie jelly bean
+Bangazon Corp: Enter the quantity to sell:  7000
+* User must select a product type id 1-10 
+```
 
 * User must enter a Product Title
 
@@ -156,6 +162,16 @@ You have successfuly completed this order. Have a nice day!
 * User is then take back to the main menu
 
 >7. Update a Product
+```
+Please select a product to update
+12. A cool jelly bean
+Bangazon Corp: Please make a selection:  12
+Bangazon Corp: Enter product type id:  3
+Bangazon Corp: Enter Product Title:  A not cool jelly bean
+Bangazon Corp: Enter price in the format xx.yy:  80000.00
+Bangazon Corp: Enter product description:  This jelly bean is a cookie
+Bangazon Corp: Enter the quantity to sell:  456
+```
 * If a user does not have a product that is not on an order, user will be prompted back to the main menu
 
 * If user has products that are not on an order, user will be prompted to select from a list of products to update.
@@ -181,10 +197,27 @@ You have successfuly completed this order. Have a nice day!
 * User is then prompted that the product has been deleted and is prompted with the main menu
 
 >9. Get revenue report
+```
+Bangazon Corp: Please make a selection:  9
+Revenue report for Maurice Moss
 
+Order #2
+--------------------------------------------------
+this Thing                           1    $12.12
+
+Order Total: $12.12
+
+Order #8
+--------------------------------------------------
+Refined Granite Shoes              1    $385.00
+
+Order Total: $385.00
+
+TOTAL REVENUE: $397.12
+Bangazon Corp: Would you like to go back to main menu? (Y/N):
+```
 * User is prompted with the revenue for all product they are selling
 
+* User is then asked if they would like to go back to main menu. If Yes, main menu is prompted. If not, user is exited from #Bangazon is fashionable style
 >10. 
 * User is prompted with a cash money baller exit from #Bangazon
-=======
->>>>>>> master
