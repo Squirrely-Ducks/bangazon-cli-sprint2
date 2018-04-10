@@ -226,11 +226,13 @@ module.exports.subMenuChooseOrderPrompt = (openOrders)=>{
       for(let i = 0; i<openOrders.length;i++){
         idArray.push(openOrders[i].order_id)
       }
-      // let str = idArray;
+      // let str = idArray.toString();
       // let regexp = `/[${str}]/gi`;
       // let matches_array = str.match(regexp);
       // console.log(str,regexp, matches_array)
       
+      console.log(idArray);
+
     for(let i = 0; i < openOrders.length; i++){
       console.log(`Order number: ${openOrders[i].order_id} `);
     }
@@ -239,7 +241,9 @@ module.exports.subMenuChooseOrderPrompt = (openOrders)=>{
         name: "order_id",
         description: "Please make a selection",
         pattern: /^-?\d+\.?\d*$/,
-        // conform: function(v){return !(v != matches_array)},
+        conform: function(v){return !(+v == idArray.includes(+v))},
+        // conform: function(v){return !(+v > prods.length || +v < 1)},
+        
         message: "Please choose a number from the above list" 
       }],
       function(err,order) {
@@ -386,7 +390,6 @@ module.exports.removeProduct = (id)=>{
   console.log(addProdHeader);
   return getProdsNotOnOrder()
   .then((prods)=>{
-    console.log("these", prods)
     return productFilter(prods,id)
   })
 }
