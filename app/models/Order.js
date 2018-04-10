@@ -34,7 +34,6 @@ module.exports.getAllOrders = (id) => {
 }
 module.exports.getActiveOrder = (id) => {
     return new Promise((resolve, reject) => {
-        console.log('here', id)
         db.get(` SELECT *
                 FROM [order]
                 WHERE customer_id = ${id} 

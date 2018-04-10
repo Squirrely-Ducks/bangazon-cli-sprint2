@@ -2,15 +2,17 @@
 'use strict';
 const prompt = require('prompt');
 const colors = require("colors/safe");
-const { getActiveOrder, getAllOrderProduct } = require('../models/Order')
+const { getActiveOrder, getAllOrderProduct, completeOrder } = require('../models/Order')
+const { getTypesByCustomer } = require('../models/PaymentType')
 let headerDivider = `${colors.america(
     "*********************************************************"
 )}`;
 
-module.exports.promptCompleteOrder = (prods) => {
+
+const subCompleteOrder = (prods) => {
     return new Promise((resolve, reject) => {
-        console.log(`  
-${headerDivider}
+        console.log(`
+${headerDivider}  
                 ${colors.red("Active Order")}
 ${headerDivider}
                 `)
@@ -32,4 +34,69 @@ ${headerDivider}
         });
     });
 }
+const promptMakePayment = (types) => {
+    return new Promise((resolve, reject) => {
+        // console.log(types, 'in prompt')
+        console.log(`  
+${headerDivider}
+                    ${colors.red("Active Order")}
+${headerDivider}
+    `)
+        let idArr = [];
+        for (let i = 0; i < types.length; i++) {
+            idArr.push(types[i].payment_type_id);
+            console.log(`${types[i].payment_type_id}.  ${types[i].type}, ${types[i].account_number}`)
+        }
+        console.log(`Select payment type to complete order`)
+        prompt.get([{
+            name: "type",
+            conform: function (v) { return idArr.includes(+v) },
+            message: "Please select one of the listed payment types"
+        }], function (err, type) {
+            if (err) {
+                return reject(err)
+            }
+            else {
+                resolve(type)
+            }
+        });
+    })
+}
 
+module.exports.promptCompleteOrder = (acId) => {
+    return new Promise((resolve, reject) => {
+        let actOrder;
+        getActiveOrder(acId)
+            .then(order => {
+                if (order === undefined) throw 'There is no open order for this customer'
+                else {
+                    actOrder = order;
+                    return getAllOrderProduct(order.order_id)
+                }
+            }).then(prods => {
+                if (prods.length < 1) throw 'There are no products on this order. Please add a product before completing order';
+                else {
+                    return subCompleteOrder(prods)
+                }
+            }).then(choice => {
+                if (choice.Complete === 'n') throw 'You have chosen not to complete this order';
+                else return getTypesByCustomer(actOrder.order_id);
+            })
+            .then(types => {
+                if (types.length < 1) throw 'This customer does not have a saved payment account. Please add one to continue completing this order.';
+                else return promptMakePayment(types)
+
+            }).then(type => {
+                if (type === undefined) throw 'You shouldnt be seeing this, if youre seeing this, something went horribly wrong'
+                else {
+                    console.log("You have successfuly completed this order. Have a nice day!")
+                    resolve(completeOrder(actOrder.order_id, type.type))
+                }
+            })
+            .catch(err => {
+                console.log(err);
+                resolve();
+            });
+    });
+
+}

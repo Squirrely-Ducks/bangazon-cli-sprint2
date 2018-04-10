@@ -11,10 +11,8 @@ prompt.message = colors.blue("Bangazon Corp");
 // app modules
 const { promptNewCustomer, promptAllCustomers } = require("./controllers/customerCtrl");
 const { promptCompleteOrder } = require("./controllers/orderCtrl");
-const { promptMakePayment } = require("./controllers/paymentTypeCtrl");
 const { new_customer } = require("./models/Customer");
 const { getActiveOrder, getAllOrderProduct, completeOrder } = require("./models/Order");
-const { getTypesByCustomer } = require('./models/PaymentType')
 const db = new Database(path.join(__dirname, "..", "db", "bangazon.sqlite"));
 const { setActiveCustomer, getActiveCustomer } = require('./activeCustomer')
 
@@ -49,63 +47,12 @@ let mainMenuHandler = (err, userInput) => {
                 })
             break;
         case "5":
-            console.log(acId, 'acId');
-            let actOrder;
-            getActiveOrder(acId)
-                .then(order => {
-                    if (order === undefined) {
-                        console.log(`${colors.blue("There is no open order for this customer")}`);
-                        displayWelcome();
-                    } else {
-                        actOrder = order;
-                        return getAllOrderProduct(order.order_id)
-                            .then(prods => {
-                                if (prods.length < 1) {
-                                    console.log(`${colors.blue("There are no products on this order")}`);
-                                    displayWelcome()
-                                } else {
-                                    return promptCompleteOrder(prods)
-                                        .then(choice => {
-                                            if (choice.Complete === 'n') {
-                                                console.log(`${colors.blue("You have chosen not to complete this order")}`);
-                                                displayWelcome();
-                                            }
-                                            else {
-                                                return getTypesByCustomer(acId)
-                                                    .then(types => {
-                                                        if (types === undefined) {
-                                                            displayWelcome();
-                                                        } else {
-                                                            return promptMakePayment(types)
-                                                                .then(type => {
-                                                                    if (type === undefined) {
-                                                                        displayWelcome();
-                                                                    }
-                                                                    else {
-                                                                        return completeOrder(actOrder.order_id, type.type)
-                                                                            .then(payment => {
-                                                                                if (payment === undefined) {
-                                                                                    displayWelcome();
-                                                                                } else {
-                                                                                    console.log("Payment Completed Successfully")
-                                                                                }
-
-                                                                            });
-                                                                    }
-                                                                })
-                                                        }
-                                                    })
-                                            }
-                                        })
-                                }
-                            })
-                    }
-                })
-
+            promptCompleteOrder(acId).then(completed => {
+                displayWelcome();
+            });
+            break;
     }
-
 };
-
 // Displays the actual main menu in console
 const displayWelcome = () => {
 
