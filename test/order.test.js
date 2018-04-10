@@ -1,14 +1,7 @@
 
 const { assert: { equal, isFunction, isArray, isObject, deepEqual } } = require("chai");
-const { createNewOrder, getAllOrders, getOneOrder, getAllOrderProduct, addOrderProd, deleteOrder, deleteOrderProd, completeOrder, getActiveOrder } = require('../app/models/Order');
+const { createNewOrder, getAllOrders, getOneOrder, getAllOrderProduct, addOrderProd, deleteOrder, deleteOrderProd, completeOrder, getRevProducts, getActiveOrder } = require('../app/models/Order');
 const bO = require('../db/buildOrder');
-
-// after((done) => {
-//     bO.build_order_table()
-//         .then(() => {
-//             done();
-//         });
-// });
 
 // dummy data for order
 let testOrder = {
@@ -27,6 +20,15 @@ let testOrderProd = {
     order_id: 70,
     product_id: 1
 }
+
+let testRevObject = {
+    "order_id": 3,
+    "count": 1,
+    "product_id": 3,
+    "title": "Handcrafted Concrete Sausages",
+    "price": "157.00"
+
+};
 
 describe('Tests for Orders', () => {
 
@@ -141,3 +143,17 @@ describe('Tests for Orders', () => {
             });
         });
     });
+
+    describe('Revenue Report: ', () => {
+        it('should return an object deep equal to test object', () => {
+            let sellerId = 8;
+            let orderId = 3;
+            return getRevProducts(orderId, sellerId)
+            .then((report) => {
+                deepEqual(report[0], testRevObject);
+            });
+        });
+    });
+});
+
+

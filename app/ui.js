@@ -17,16 +17,13 @@ const { new_customer } = require("./models/Customer");
 const { getActiveOrder, getAllOrderProduct, completeOrder } = require("./models/Order");
 const db = new Database(path.join(__dirname, "..", "db", "bangazon.sqlite"));
 const { setActiveCustomer, getActiveCustomer } = require("./activeCustomer");
-const { promptAddPayment, createPayment } = require("./controllers/addpaymentCtrl");
-
-
-
+const {promptAddPayment,createPayment} = require("./controllers/addpaymentCtrl");
+const { displayRevReport } = require("./controllers/revenueCtrl");
 
 function validator() {
     console.log(`${colors.bgRed(`please set an active customer`)}`);
     displayWelcome();
 };
-
 
 const headerDivider = `${colors.america(
     "*********************************************************"
@@ -116,6 +113,7 @@ let mainMenuHandler = (err, userInput) => {
                     })
             }
             break;
+        
         case "7":
             if (!id) validator();
             else {
@@ -134,6 +132,7 @@ let mainMenuHandler = (err, userInput) => {
                     })
             }
             break;
+        
         case "8":
         if (!id) validator();
         else {
@@ -148,12 +147,27 @@ let mainMenuHandler = (err, userInput) => {
                 })
             }
             break;
+        
+        case "9":
+        if (!id) validator();
+          else {
+          displayRevReport().then(done => {
+            if (!done) {
+            console.log("");
+            console.log(colors.red("THIS USER HAS NO SALES"));
+            console.log("");
+            } else {
+              backToMenu();
+            }
+          });
+        }    
+        break; 
+        
         case "10":
             alert()
             break;
     }
-}
-
+};
 
 // Displays the actual main menu in console
 const displayWelcome = () => {
@@ -188,6 +202,24 @@ const displayWelcome = () => {
             mainMenuHandler
         );
     });
+};
+
+const backToMenu = () => {
+  prompt.get(
+    {
+      name: "selection",
+      description: "Would you like to go back to main menu? (Y/N)",
+      message: "Please enter Y/N",
+      pattern: /[YyNn]/
+    },
+    (err, { selection }) => {
+      if (selection.toUpperCase() === "Y") {
+        module.exports.displayWelcome();
+      } else {
+        return;
+      }
+    }
+  );
 };
 
 module.exports = {
