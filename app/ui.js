@@ -110,3 +110,6 @@ const displayWelcome = () => {
     });
 };
 
+module.exports = {
+    displayWelcome
+};
