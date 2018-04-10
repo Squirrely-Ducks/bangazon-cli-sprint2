@@ -44,7 +44,7 @@ In your terminal enter the following commands
 * `` Then enter customer information the result should post to the table as such ``
 
 First Name | Last Name | Street | City | Zip | Phone 
---- | ---  | --- |--- | ---  | --- | --- | 
+--- | ---  | --- |--- | ---  | --- | 
 *Cookie* | *Case* | **Seasy Streat** | **Bird Land** | 37209 | 615-828-569
 
 >> To be able to use any of the menu options 3-10 you must select an active customer by selecting 2. in the main menu 
