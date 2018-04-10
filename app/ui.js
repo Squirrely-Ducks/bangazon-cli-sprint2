@@ -22,12 +22,9 @@ const { promptAddPayment, createPayment } = require("./controllers/addpaymentCtr
 
 
 
-function validator(id) {
-    if (!id) {
-        console.log(`${colors.bgRed(`please set an active customer`)}`);
-        // promptAllCustomers()
-        // setActiveCustomer(customerSelect.customer_id);
-    }
+function validator() {
+    console.log(`${colors.bgRed(`please set an active customer`)}`);
+    displayWelcome();
 };
 
 
@@ -62,69 +59,84 @@ let mainMenuHandler = (err, userInput) => {
                 })
             break;
         case "3":
-            promptAddPayment()
-                .then(paydata => {
-                    createPayment(paydata);
-                    displayWelcome();
-                });
+            if (!id) validator();
+            else {
+                promptAddPayment()
+                    .then(paydata => {
+                        createPayment(paydata);
+                        displayWelcome();
+                    });
+            }
             break
         case "4":
-            //ADD PRODUCT TO ORDER
-            let orderId;
-            let prodId;
-            // validator(id);
-            promptAddToCart(id)
-                .then((array) => {
-                    return subMenuChooseOrderPrompt(array)
-                }).then((orderChoiceId) => {
-                    orderId = orderChoiceId
-                    return getProdArray()
-                }).then((products) => {
-                    return subMenuChooseProductPrompt(products)
-                }).then((productId) => {
-                    prodId = productId;
-                    return prepData(orderId, prodId)
-                }).then((data) => {
-                    return adjustQuantity(prodId)
-                }).then((data) => {
-                    return sendNewQuantity(data, prodId)
-                }).then(() => {
-                    displayWelcome();
-                })
+            if (!id) validator();
+            else {
+                //ADD PRODUCT TO ORDER
+                let orderId;
+                let prodId;
+                // validator(id);
+                promptAddToCart(id)
+                    .then((array) => {
+                        return subMenuChooseOrderPrompt(array)
+                    }).then((orderChoiceId) => {
+                        orderId = orderChoiceId
+                        return getProdArray()
+                    }).then((products) => {
+                        return subMenuChooseProductPrompt(products)
+                    }).then((productId) => {
+                        prodId = productId;
+                        return prepData(orderId, prodId)
+                    }).then((data) => {
+                        return adjustQuantity(prodId)
+                    }).then((data) => {
+                        return sendNewQuantity(data, prodId)
+                    }).then(() => {
+                        displayWelcome();
+                    })
+            }
             break;
         case "5":
-            promptCompleteOrder(id).then(completed => {
-                displayWelcome();
-            });
+            if (!id) validator();
+            else {
+                promptCompleteOrder(id).then(completed => {
+                    displayWelcome();
+                });
+            }
             break;
 
         case "6":
-            // Add a Product to Sell
-            promptNewProduct(id)
-                .then((data) => {
-                    return sendNewProductData(data, id)
-                }).then(() => {
-                    displayWelcome();
-                })
+            if (!id) validator();
+            else {
+                // Add a Product to Sell
+                promptNewProduct(id)
+                    .then((data) => {
+                        return sendNewProductData(data, id)
+                    }).then(() => {
+                        displayWelcome();
+                    })
+            }
             break;
-
         case "7":
-            // Update a Product to Sell
-            let productId;
-            updateProductArray(id)
-                .then((prods) => {
-                    return subMenuPrompt(prods)
-                }).then((prodId) => {
-                    productId = prodId
-                    return promptUpdateProduct()
-                }).then((data) => {
-                    return sendUpdateProd(data, productId, id)
-                }).then(() => {
-                    displayWelcome();
-                })
+            if (!id) validator();
+            else {
+                // Update a Product to Sell
+                let productId;
+                updateProductArray(id)
+                    .then((prods) => {
+                        return subMenuPrompt(prods)
+                    }).then((prodId) => {
+                        productId = prodId
+                        return promptUpdateProduct()
+                    }).then((data) => {
+                        return sendUpdateProd(data, productId, id)
+                    }).then(() => {
+                        displayWelcome();
+                    })
+            }
             break;
-
         case "8":
+        if (!id) validator();
+        else {
             // Remove a Product to Sell
             removeProduct(id)
                 .then((prods) => {
@@ -134,8 +146,8 @@ let mainMenuHandler = (err, userInput) => {
                 }).then(() => {
                     displayWelcome();
                 })
+            }
             break;
-
         case "10":
             alert()
             break;
@@ -147,9 +159,9 @@ let mainMenuHandler = (err, userInput) => {
 const displayWelcome = () => {
     let headerDivider = `${
         colors.america(
-        "*********************************************************"
+            "*********************************************************"
         )
-     }`;
+        }`;
     return new Promise((resolve, reject) => {
         console.log(`
             ${ headerDivider}
