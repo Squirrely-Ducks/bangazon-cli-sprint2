@@ -308,6 +308,8 @@ module.exports.subMenuConfirmPrompt = (products)=>{
 }
 ///////////////////
 
+
+
 //////// FUNCTIONS FOR UI
 //ADDING PRODUCTS TO CART 
 module.exports.promptAddToCart = (id)=>{
@@ -384,6 +386,9 @@ module.exports.sendUpdateProd = (data,prodId,id)=>{
   });
 }
 ///////////////////
+
+
+
 
 //DELETING A PRODUCT
 //GETS ALL AVAILABLE PRODUCTS TO DELETE

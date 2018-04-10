@@ -20,35 +20,6 @@ const { setActiveCustomer, getActiveCustomer } = require("./activeCustomer");
 const {promptAddPayment,createPayment} = require("./controllers/addpaymentCtrl");
 const { displayRevReport } = require("./controllers/revenueCtrl");
 
-<<<<<<< HEAD
-
-
-//HELPER FUNCTIONS
-function validator(id){
-  if (!id){
-      console.log(`${colors.bgRed(`please set an active customer`)}`);
-      // promptAllCustomers()
-      // setActiveCustomer(customerSelect.customer_id);
-  } 
-};
-const backToMenu = () => {
-    prompt.get(
-      {
-       name: "selection",
-       description: "Would you like to go back to main menu? (Y/N)",
-      message: "Please enter Y/N",
-      pattern: /[YyNn]/
-    },
-    (err, { selection }) => {
-      if (selection.toUpperCase() === "Y") {
-        displayWelcome();
-      } else {
-        return;
-      }
-    }
-  );
-};
-=======
 function validator() {
     console.log(`${colors.bgRed(`please set an active customer`)}`);
     displayWelcome();
@@ -57,7 +28,6 @@ function validator() {
 const headerDivider = `${colors.america(
     "*********************************************************"
 )}`;
->>>>>>> master
 // Start Program
 prompt.start();
 
