@@ -9,19 +9,26 @@ const { Database } = require("sqlite3").verbose();
 prompt.message = colors.blue("Bangazon Corp");
 
 // app modules
-const { promptAddToCart, addNewProduct, updateProductArray, updateProducts, removeProduct } = require("./controllers/productCtrl");
-const { promptNewCustomer, promptAllCustomers } = require("./controllers/customerCtrl");
 const { promptCompleteOrder } = require("./controllers/orderCtrl");
+const { promptAddToCart, subMenuChooseOrderPrompt, getProdArray, subMenuChooseProductPrompt, prepData, adjustQuantity, sendNewQuantity, promptNewProduct, addNewProduct, sendNewProductData, updateProductArray, subMenuPrompt, promptUpdateProduct, updateProducts, sendUpdateProd, removeProduct, subMenuDeletePrompt, deleteProd } = require("./controllers/productCtrl");
+const { alert } = require("./animation");
+const { promptNewCustomer, promptAllCustomers } = require("./controllers/customerCtrl");
 const { new_customer } = require("./models/Customer");
 const { getActiveOrder, getAllOrderProduct, completeOrder } = require("./models/Order");
 const db = new Database(path.join(__dirname, "..", "db", "bangazon.sqlite"));
-const { setActiveCustomer, getActiveCustomer } = require('./activeCustomer')
+const { setActiveCustomer, getActiveCustomer } = require("./activeCustomer");
 const { promptAddPayment, createPayment } = require("./controllers/addpaymentCtrl");
 
 
 
 
-
+function validator(id) {
+    if (!id) {
+        console.log(`${colors.bgRed(`please set an active customer`)}`);
+        // promptAllCustomers()
+        // setActiveCustomer(customerSelect.customer_id);
+    }
+};
 
 
 const headerDivider = `${colors.america(
@@ -48,20 +55,42 @@ let mainMenuHandler = (err, userInput) => {
             break;
         // Allows user to select the customer to make active
         case "2":
-            promptAllCustomers().then(customerSelect => {
-                setActiveCustomer(customerSelect.customer_id);
-                displayWelcome();
-            });
+            promptAllCustomers()
+                .then((customerSelect) => {
+                    setActiveCustomer(customerSelect.customer_id);
+                    displayWelcome();
+                })
             break;
         case "3":
-            promptAddPayment().then(paydata => {
-                createPayment(paydata);
-                displayWelcome();
-            });
+            promptAddPayment()
+                .then(paydata => {
+                    createPayment(paydata);
+                    displayWelcome();
+                });
             break
-        // Add product to shopping cart
         case "4":
+            //ADD PRODUCT TO ORDER
+            let orderId;
+            let prodId;
+            // validator(id);
             promptAddToCart(id)
+                .then((array) => {
+                    return subMenuChooseOrderPrompt(array)
+                }).then((orderChoiceId) => {
+                    orderId = orderChoiceId
+                    return getProdArray()
+                }).then((products) => {
+                    return subMenuChooseProductPrompt(products)
+                }).then((productId) => {
+                    prodId = productId;
+                    return prepData(orderId, prodId)
+                }).then((data) => {
+                    return adjustQuantity(prodId)
+                }).then((data) => {
+                    return sendNewQuantity(data, prodId)
+                }).then(() => {
+                    displayWelcome();
+                })
             break;
         case "5":
             promptCompleteOrder(id).then(completed => {
@@ -71,41 +100,72 @@ let mainMenuHandler = (err, userInput) => {
 
         case "6":
             // Add a Product to Sell
-            addNewProduct(id)
-            //main menus prompts
-
+            promptNewProduct(id)
+                .then((data) => {
+                    return sendNewProductData(data, id)
+                }).then(() => {
+                    displayWelcome();
+                })
             break;
 
         case "7":
             // Update a Product to Sell
+            let productId;
             updateProductArray(id)
+                .then((prods) => {
+                    return subMenuPrompt(prods)
+                }).then((prodId) => {
+                    productId = prodId
+                    return promptUpdateProduct()
+                }).then((data) => {
+                    return sendUpdateProd(data, productId, id)
+                }).then(() => {
+                    displayWelcome();
+                })
             break;
 
         case "8":
             // Remove a Product to Sell
-            removeProduct(id);
+            removeProduct(id)
+                .then((prods) => {
+                    return subMenuDeletePrompt(prods)
+                }).then((prodChoice) => {
+                    return deleteProd(prodChoice)
+                }).then(() => {
+                    displayWelcome();
+                })
+            break;
+
+        case "10":
+            alert()
             break;
     }
-};
+}
+
+
 // Displays the actual main menu in console
 const displayWelcome = () => {
-    ''
+    let headerDivider = `${
+        colors.america(
+        "*********************************************************"
+        )
+     }`;
     return new Promise((resolve, reject) => {
         console.log(`
-  ${headerDivider}
-  ${colors.red("**  Welcome to Bangazon! Command Line Ordering System  **")}
-  ${colors.red(`current Active Customer ${getActiveCustomer().id}`)}
-  ${headerDivider}
-  ${colors.america("1.")} ${colors.white("Create a customer account")}
-  ${colors.america("2.")} ${colors.white("Choose active customer")}
-  ${colors.america("3.")} ${colors.white("Create a payment option")}
-  ${colors.america("4.")} ${colors.white("Add product to shopping cart")}
-  ${colors.america("5.")} ${colors.white("Complete an order")}
-  ${colors.america("6.")} ${colors.white("Add a Product to Sell")}
-  ${colors.america("7.")} ${colors.white("Update a Product to Sell")}
-  ${colors.america("8.")} ${colors.white("Remove a Customer Product from inventory")}
-  ${colors.america("9.")} ${colors.white("Get revenue rep")}
-  ${colors.america("10.")} ${colors.white("Leave Bangazon!")}`);
+            ${ headerDivider}
+            ${ colors.red("**  Welcome to Bangazon! Command Line Ordering System  **")}
+            ${ colors.red(`current Active Customer ${getActiveCustomer().id}`)}
+            ${ headerDivider}
+            ${ colors.america("1.")} ${colors.white("Create a customer account")}
+            ${ colors.america("2.")} ${colors.white("Choose active customer")}
+            ${ colors.america("3.")} ${colors.white("Create a payment option")}
+            ${ colors.america("4.")} ${colors.white("Add product to shopping cart")}
+            ${ colors.america("5.")} ${colors.white("Complete an order")}
+            ${ colors.america("6.")} ${colors.white("Add a Product to Sell")}
+            ${ colors.america("7.")} ${colors.white("Update a Product to Sell")}
+            ${ colors.america("8.")} ${colors.white("Remove a Customer Product from inventory")}
+            ${ colors.america("9.")} ${colors.white("Get revenue rep")}
+            ${ colors.america("10.")} ${colors.white("Leave Bangazon!")} `);
         prompt.get(
             [
                 {
