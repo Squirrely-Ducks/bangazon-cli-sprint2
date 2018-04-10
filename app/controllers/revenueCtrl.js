@@ -55,7 +55,6 @@ const printProducts = products => {
     const space = " ";
     products.forEach(
       ({ order_id, product_id, count, title, price, products }) => {
-        console.log('Price: ', price );
         price = price.replace(".", "");
         orderTotal += +price * +count;
         console.log(
